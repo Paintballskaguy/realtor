@@ -54,7 +54,7 @@ export default function ListingDetail() {
                 <img
                   src={listing.image}
                   alt=""
-                  className="w-full h-[28rem] object-cover"
+                  className="w-full h-[20rem] sm:h-[28rem] object-cover"
                 />
               </motion.div>
             </FadeIn>
@@ -62,7 +62,7 @@ export default function ListingDetail() {
 
           <div className="lg:col-span-2">
             <FadeIn delay={0.1}>
-              <div className="sticky top-24">
+              <div className="lg:sticky lg:top-24">
                 <motion.p
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}

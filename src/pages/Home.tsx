@@ -232,7 +232,7 @@ export default function Home() {
                 type="email"
                 placeholder="your@email.com"
                 required
-                className="flex-1 rounded-xl border-2 border-gray-200 px-4 py-3 text-navy font-medium focus:outline-none focus:border-gold transition-colors"
+                className="flex-1 rounded-xl border-2 border-gray-200 px-4 py-3 text-base text-navy font-medium focus:outline-none focus:border-gold transition-colors"
               />
               <button
                 type="submit"

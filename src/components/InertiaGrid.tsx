@@ -15,7 +15,16 @@ export default function InertiaGrid({ listings, title = 'Featured', subtitle }: 
   const containerRef = useRef<HTMLDivElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const [dragConstraints, setDragConstraints] = useState({ left: 0, right: 0 });
+  const [isHoverCapable, setIsHoverCapable] = useState(true);
   const shouldReduceMotion = useReducedMotion();
+
+  useEffect(() => {
+    const mql = window.matchMedia('(hover: hover)');
+    setIsHoverCapable(mql.matches);
+    const handler = (e: MediaQueryListEvent) => setIsHoverCapable(e.matches);
+    mql.addEventListener('change', handler);
+    return () => mql.removeEventListener('change', handler);
+  }, []);
 
   const x = useMotionValue(0);
   const springX = useSpring(x, { stiffness: 300, damping: 30 });
@@ -90,7 +99,7 @@ export default function InertiaGrid({ listings, title = 'Featured', subtitle }: 
         <motion.div
           ref={containerRef}
           style={shouldReduceMotion ? undefined : { x: springX, rotateY }}
-          drag={shouldReduceMotion ? false : 'x'}
+          drag={shouldReduceMotion || !isHoverCapable ? false : 'x'}
           dragConstraints={dragConstraints}
           dragElastic={0.15}
           dragTransition={{ bounceStiffness: 300, bounceDamping: 30 }}
@@ -160,7 +169,7 @@ export default function InertiaGrid({ listings, title = 'Featured', subtitle }: 
             type="button"
             onClick={() => scrollBy('left')}
             aria-label="Previous listings"
-            className="w-10 h-10 rounded-full border border-gray-200 bg-white flex items-center justify-center text-navy hover:border-gold hover:text-gold transition-colors"
+            className="w-11 h-11 rounded-full border border-gray-200 bg-white flex items-center justify-center text-navy hover:border-gold hover:text-gold transition-colors"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
           </button>
@@ -168,7 +177,7 @@ export default function InertiaGrid({ listings, title = 'Featured', subtitle }: 
             type="button"
             onClick={() => scrollBy('right')}
             aria-label="Next listings"
-            className="w-10 h-10 rounded-full border border-gray-200 bg-white flex items-center justify-center text-navy hover:border-gold hover:text-gold transition-colors"
+            className="w-11 h-11 rounded-full border border-gray-200 bg-white flex items-center justify-center text-navy hover:border-gold hover:text-gold transition-colors"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
           </button>

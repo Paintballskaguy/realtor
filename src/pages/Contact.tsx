@@ -78,7 +78,7 @@ export default function Contact() {
                   <img
                     src={agent.photo}
                     alt={agent.name}
-                    className="w-full h-[28rem] object-cover object-top"
+                    className="w-full h-[20rem] sm:h-[28rem] object-cover object-top"
                   />
                 </div>
                 <div className="relative mt-6 bg-white rounded-2xl border border-gray-100 shadow-lg p-6">
@@ -176,7 +176,7 @@ export default function Contact() {
                             aria-invalid={errors[field.id] ? 'true' : 'false'}
                             aria-describedby={errors[field.id] ? `${field.id}-error` : undefined}
                             required={field.required}
-                            className={`w-full rounded-xl border-2 px-4 pt-5 pb-2.5 text-navy font-medium focus:ring-0 outline-none transition-colors bg-transparent ${
+                            className={`w-full rounded-xl border-2 px-4 pt-5 pb-2.5 text-base text-navy font-medium focus:ring-0 outline-none transition-colors bg-transparent ${
                               errors[field.id]
                                 ? 'border-red-300 focus:border-red-400'
                                 : 'border-gray-100 focus:border-gold'
@@ -215,7 +215,7 @@ export default function Contact() {
                           aria-invalid={errors.message ? 'true' : 'false'}
                           aria-describedby={errors.message ? 'message-error' : undefined}
                           required
-                          className={`w-full rounded-xl border-2 px-4 pt-5 pb-2.5 text-navy font-medium focus:ring-0 outline-none transition-colors bg-transparent resize-none ${
+                          className={`w-full rounded-xl border-2 px-4 pt-5 pb-2.5 text-base text-navy font-medium focus:ring-0 outline-none transition-colors bg-transparent resize-none ${
                             errors.message
                               ? 'border-red-300 focus:border-red-400'
                               : 'border-gray-100 focus:border-gold'

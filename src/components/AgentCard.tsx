@@ -13,16 +13,14 @@ export default function AgentCard() {
           transition={{ type: 'spring', stiffness: 300, damping: 20 }}
           className="relative flex-shrink-0"
         >
-          <div className="w-40 h-40 rounded-2xl overflow-hidden shadow-xl ring-4 ring-gold/20">
+          <div className="w-56 h-56 rounded-2xl overflow-hidden shadow-xl ring-4 ring-gold/20">
             <img
               src={agent.photo}
               alt={agent.name}
               className="w-full h-full object-cover"
             />
           </div>
-          <div className="absolute -bottom-3 -right-3 bg-gold text-navy text-xs font-bold px-3 py-1.5 rounded-full shadow-lg">
-            {agent.rating}
-          </div>
+
         </motion.div>
 
         <div className="flex-1 text-center lg:text-left">
