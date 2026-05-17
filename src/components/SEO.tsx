@@ -73,9 +73,10 @@ export default function SEO({
       <meta name="twitter:image" content={image} />
 
       {/* Structured Data */}
-      <script type="application/ld+json">
-        {JSON.stringify(realEstateAgentSchema)}
-      </script>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(realEstateAgentSchema) }}
+      />
     </Helmet>
   );
 }

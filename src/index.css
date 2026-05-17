@@ -3,8 +3,8 @@
 @theme {
   --color-navy: #0f172a;
   --color-navy-light: #1e293b;
-  --color-gold: #c9a227;
-  --color-gold-hover: #b8941f;
+  --color-gold: #F2A900;
+  --color-gold-hover: #D69400;
   --color-cream: #fafaf9;
   --color-surface: #ffffff;
   --color-muted: #64748b;
@@ -48,7 +48,7 @@ body {
 
 /* Gold gradient text */
 .gradient-gold {
-  background: linear-gradient(135deg, #c9a227 0%, #e8d5a3 50%, #c9a227 100%);
+  background: linear-gradient(135deg, #F2A900 0%, #FFD966 50%, #F2A900 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;

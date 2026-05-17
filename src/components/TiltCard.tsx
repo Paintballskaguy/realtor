@@ -1,5 +1,5 @@
 import { useRef, type ReactNode } from 'react';
-import { motion, useMotionValue, useSpring, useTransform, useReducedMotion } from 'framer-motion';
+import { motion, useMotionValue, useSpring, useTransform, useReducedMotion, useMotionTemplate } from 'framer-motion';
 
 interface TiltCardProps {
   children: ReactNode;
@@ -12,36 +12,43 @@ export default function TiltCard({
   children,
   className = '',
   tiltAmount = 10,
-  glowColor = 'rgba(201, 162, 39, 0.15)',
+  glowColor = 'rgba(242, 169, 0, 0.15)',
 }: TiltCardProps) {
   const ref = useRef<HTMLDivElement>(null);
   const shouldReduceMotion = useReducedMotion();
 
-  const x = useMotionValue(0.5);
-  const y = useMotionValue(0.5);
+  // Unified position state [0, 1]
+  const xPercent = useMotionValue(0.5);
+  const yPercent = useMotionValue(0.5);
 
   const springConfig = { stiffness: 300, damping: 30 };
-  const xSpring = useSpring(x, springConfig);
-  const ySpring = useSpring(y, springConfig);
+  const xSpring = useSpring(xPercent, springConfig);
+  const ySpring = useSpring(yPercent, springConfig);
 
+  // Rotation transforms
   const rotateX = useTransform(ySpring, [0, 1], [tiltAmount, -tiltAmount]);
   const rotateY = useTransform(xSpring, [0, 1], [-tiltAmount, tiltAmount]);
 
+  // Sheen / Glow transforms using useMotionTemplate for performance and to avoid hook violations
   const sheenX = useTransform(xSpring, [0, 1], ['-50%', '150%']);
   const sheenY = useTransform(ySpring, [0, 1], ['-50%', '150%']);
+
+  const glowX = useTransform(xSpring, [0, 1], ['0%', '100%']);
+  const glowY = useTransform(ySpring, [0, 1], ['0%', '100%']);
+  const glowGradient = useMotionTemplate`radial-gradient(600px circle at ${glowX} ${glowY}, ${glowColor}, transparent 40%)`;
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (shouldReduceMotion || !ref.current) return;
     const rect = ref.current.getBoundingClientRect();
     const xPos = (e.clientX - rect.left) / rect.width;
     const yPos = (e.clientY - rect.top) / rect.height;
-    x.set(xPos);
-    y.set(yPos);
+    xPercent.set(xPos);
+    yPercent.set(yPos);
   };
 
   const handleMouseLeave = () => {
-    x.set(0.5);
-    y.set(0.5);
+    xPercent.set(0.5);
+    yPercent.set(0.5);
   };
 
   return (
@@ -58,14 +65,12 @@ export default function TiltCard({
       whileHover={shouldReduceMotion ? undefined : { scale: 1.02 }}
       whileTap={shouldReduceMotion ? undefined : { scale: 0.98 }}
       transition={{ type: 'spring', stiffness: 400, damping: 25 }}
-      className={`relative ${className}`}
+      className={`relative group ${className}`}
     >
       {!shouldReduceMotion && (
         <motion.div
           className="absolute -inset-[1px] rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-          style={{
-            background: `radial-gradient(600px circle at ${useTransform(xSpring, [0, 1], ['0%', '100%'])} ${useTransform(ySpring, [0, 1], ['0%', '100%'])}, ${glowColor}, transparent 40%)`,
-          }}
+          style={{ background: glowGradient }}
         />
       )}
       <div className="relative overflow-hidden rounded-2xl">

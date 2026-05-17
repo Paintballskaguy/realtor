@@ -2,11 +2,11 @@ export const agent = {
   name: 'Kandice Nowak',
   title: 'Real Estate Agent',
   phone: '(918) 408-8089',
-  email: '', // not publicly listed on the page
+  email: 'kandicenowak@gmail.com',
   office: 'CENTURY 21 First Choice Realty',
   address: '4004 E 51st St, Tulsa, OK 74135',
   photo: '/agent-photo.jpg',
-  bio: `Born and raised in Tulsa, Kandice Nowak brings more than just real estate savvy to the table—she brings passion, purpose, and a deep-rooted love for her hometown. After nearly a decade of rolling up her sleeves in the nonprofit world, Kandice followed her calling to real estate and hasn't looked back since. Proudly serving Tulsa and the surrounding Northeast Oklahoma communities with CENTURY 21 First Choice Realty, Kandice combines local know-how with big energy to deliver a home-buying or selling experience that's as smooth as it is exciting.`,
+  bio: `Kandice Nowak is a Tulsa native who knows every neighborhood, school district, and hidden gem in Northeast Oklahoma. With a background in nonprofit service, she brings patience, advocacy, and genuine care to every transaction — qualities that have earned her 34 five-star reviews. Whether you are buying your first home or selling your fifth, Kandice delivers honest advice, clear communication, and results that exceed expectations.`,
   rating: '5 out of 5',
   reviewCount: 34,
   social: {

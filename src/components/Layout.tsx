@@ -2,7 +2,7 @@ import { Link, Outlet, useLocation } from 'react-router';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { useState, useRef, useEffect } from 'react';
 import { agent } from '../data/agent';
-import ParticleField from './ParticleField';
+import ParticleCanvas from './ParticleCanvas';
 import Logo from './Logo';
 
 export default function Layout() {
@@ -56,7 +56,7 @@ export default function Layout() {
 
   return (
     <div className="relative min-h-screen flex flex-col bg-cream">
-      <ParticleField />
+      <ParticleCanvas mode="field" />
 
       {/* Skip to content */}
       <a

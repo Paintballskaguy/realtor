@@ -12,7 +12,7 @@ interface Sparkle {
   duration: number;
 }
 
-const SPARKLE_COLORS = ['#c9a227', '#e8d5a3', '#ffffff', '#ffd700'];
+const SPARKLE_COLORS = ['#F2A900', '#FFD966', '#ffffff', '#FFD700'];
 
 function randomRange(min: number, max: number) {
   return Math.random() * (max - min) + min;

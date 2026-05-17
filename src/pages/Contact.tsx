@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { agent } from '../data/agent';
-import HeroParticles from '../components/HeroParticles';
+import ParticleCanvas from '../components/ParticleCanvas';
 import SEO from '../components/SEO';
 import { FadeIn } from '../components/Motion';
 import SparkleButton from '../components/SparkleButton';
@@ -47,20 +47,20 @@ export default function Contact() {
   return (
     <div className="min-h-screen">
       <SEO
-        title="Contact"
-        description={`Contact ${agent.name}, Tulsa real estate agent. Call ${agent.phone} or send a message to get started.`}
+        title="Contact | Free Consultation"
+        description={`Contact ${agent.name}, Tulsa real estate agent. Free consultation, no obligation. Call ${agent.phone} or send a message to get started.`}
         pathname="/contact"
       />
 
       {/* Header */}
       <div className="relative bg-navy text-white py-16 px-4 overflow-hidden">
-        <HeroParticles />
+        <ParticleCanvas mode="hero" />
         <div className="relative z-10 max-w-7xl mx-auto">
           <FadeIn>
-            <p className="text-gold text-sm font-semibold uppercase tracking-wider mb-2">Get in Touch</p>
-            <h1 className="text-4xl sm:text-5xl font-bold mb-3">Contact {agent.name.split(' ')[0]}</h1>
-            <p className="text-gray-400 max-w-xl">
-              Ready to buy or sell? Send a message and get a response within 24 hours.
+            <p className="text-gold text-sm font-semibold uppercase tracking-wider mb-2">Free Consultation &bull; No Obligation</p>
+            <h1 className="text-4xl sm:text-5xl font-bold mb-3">Let's Talk About Your Next Move</h1>
+            <p className="text-gray-400 max-w-xl leading-relaxed">
+              Buying or selling in Tulsa? Kandice will give you honest answers, a clear plan, and zero pressure. Call, text, or email anytime.
             </p>
           </FadeIn>
         </div>
@@ -91,6 +91,14 @@ export default function Contact() {
                       </span>
                       {agent.phone}
                     </a>
+                    {agent.email && (
+                      <a href={`mailto:${agent.email}`} className="flex items-center gap-3 text-navy hover:text-gold transition-colors">
+                        <span className="flex items-center justify-center w-9 h-9 rounded-lg bg-navy/5 text-navy">
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
+                        </span>
+                        {agent.email}
+                      </a>
+                    )}
                     <span className="flex items-center gap-3">
                       <span className="flex items-center justify-center w-9 h-9 rounded-lg bg-navy/5 text-navy">
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
@@ -135,7 +143,7 @@ export default function Contact() {
                 ) : (
                   <>
                     <h2 className="text-2xl font-bold text-navy mb-2">Send a Message</h2>
-                    <p className="text-muted mb-8">Fill out the form below and {agent.name.split(' ')[0]} will get back to you shortly.</p>
+                    <p className="text-muted mb-8">Free consultation. No obligation. {agent.name.split(' ')[0]} typically responds within a few hours.</p>
 
                     <form className="space-y-6" onSubmit={handleSubmit} noValidate>
                       {[
@@ -149,7 +157,7 @@ export default function Contact() {
                             animate={{
                               y: focused === field.id || formData[field.id as keyof typeof formData] ? -24 : 0,
                               scale: focused === field.id || formData[field.id as keyof typeof formData] ? 0.85 : 1,
-                              color: focused === field.id ? '#c9a227' : errors[field.id] ? '#ef4444' : '#64748b',
+                              color: focused === field.id ? '#F2A900' : errors[field.id] ? '#ef4444' : '#64748b',
                             }}
                             transition={{ duration: 0.2 }}
                             className="absolute left-4 top-3.5 origin-left pointer-events-none font-medium"
@@ -189,7 +197,7 @@ export default function Contact() {
                           animate={{
                             y: focused === 'message' || formData.message ? -24 : 0,
                             scale: focused === 'message' || formData.message ? 0.85 : 1,
-                            color: focused === 'message' ? '#c9a227' : errors.message ? '#ef4444' : '#64748b',
+                            color: focused === 'message' ? '#F2A900' : errors.message ? '#ef4444' : '#64748b',
                           }}
                           transition={{ duration: 0.2 }}
                           className="absolute left-4 top-3.5 origin-left pointer-events-none font-medium"

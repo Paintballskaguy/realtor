@@ -1,5 +1,6 @@
-import { motion, type Variants, useReducedMotion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import type { ReactNode } from 'react';
+import { itemVariants } from '../lib/variants';
 
 interface FadeInProps {
   children: ReactNode;
@@ -50,11 +51,6 @@ interface StaggerContainerProps {
   stagger?: number;
   delay?: number;
 }
-
-export const itemVariants: Variants = {
-  hidden: { opacity: 0, y: 20 },
-  show: { opacity: 1, y: 0 },
-};
 
 export function StaggerContainer({
   children,

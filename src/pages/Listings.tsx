@@ -1,6 +1,6 @@
 import { mockListings } from '../data/mockListings';
 import ListingCard from '../components/ListingCard';
-import HeroParticles from '../components/HeroParticles';
+import ParticleCanvas from '../components/ParticleCanvas';
 import SEO from '../components/SEO';
 import { FadeIn, StaggerContainer, StaggerItem } from '../components/Motion';
 
@@ -9,13 +9,13 @@ export default function Listings() {
     <div className="min-h-screen">
       <SEO
         title="Homes for Sale in Tulsa, OK"
-        description="Browse all homes and properties for sale in Tulsa, Oklahoma. Updated daily with the latest MLS listings."
+        description="Browse homes for sale in Tulsa, Oklahoma. View photos, prices, and details. Contact Kandice Nowak for a private showing."
         pathname="/listings"
       />
 
       {/* Page Header */}
       <div className="relative bg-navy text-white py-16 px-4 overflow-hidden">
-        <HeroParticles />
+        <ParticleCanvas mode="hero" />
         <div className="relative z-10 max-w-7xl mx-auto">
           <FadeIn>
             <p className="text-gold text-sm font-semibold uppercase tracking-wider mb-2">Tulsa, Oklahoma</p>
