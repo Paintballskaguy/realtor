@@ -124,7 +124,7 @@ export default function InertiaGrid({ listings, title = 'Featured', subtitle }: 
                   <div className="aspect-[4/3] overflow-hidden relative">
                     <img
                       src={listing.image}
-                      alt=""
+                      alt={listing.address}
                       loading="lazy"
                       className="h-full w-full object-cover group-hover:scale-110 transition-transform duration-700"
                     />

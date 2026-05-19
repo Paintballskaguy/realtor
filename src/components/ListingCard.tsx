@@ -19,7 +19,7 @@ export default function ListingCard({ listing }: Props) {
           <motion.img
             layoutId={`listing-image-${listing.id}`}
             src={listing.image}
-            alt=""
+            alt={listing.address}
             loading="lazy"
             className="h-full w-full object-cover group-hover:scale-110 transition-transform duration-700"
           />

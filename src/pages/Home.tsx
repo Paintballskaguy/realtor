@@ -55,7 +55,7 @@ export default function Home() {
               Buy or Sell Your <span className="gradient-gold">Tulsa</span> Home
             </h1>
             <p className="text-lg sm:text-xl text-gray-300 max-w-2xl mx-auto mb-10 leading-relaxed">
-              {agent.name} has earned {agent.reviewCount} five-star reviews by putting clients first. No pressure. No surprises. Just honest guidance and results.
+              {agent.name} puts clients first. No pressure. No surprises. Just honest guidance and results.
             </p>
           </motion.div>
 
@@ -88,20 +88,16 @@ export default function Home() {
         >
           <div className="glass rounded-2xl px-8 py-6 flex flex-wrap justify-center gap-8 sm:gap-16">
             <div className="text-center">
-              <div className="text-3xl font-bold gradient-gold"><AnimatedCounter value={34} /></div>
-              <div className="text-xs text-gray-400 uppercase tracking-wider mt-1">5-Star Reviews</div>
-            </div>
-            <div className="text-center">
-              <div className="text-3xl font-bold gradient-gold"><AnimatedCounter value={5} suffix="/5" /></div>
-              <div className="text-xs text-gray-400 uppercase tracking-wider mt-1">Average Rating</div>
-            </div>
-            <div className="text-center">
               <div className="text-3xl font-bold gradient-gold"><AnimatedCounter value={6} /></div>
+              <div className="text-xs text-gray-400 uppercase tracking-wider mt-1">Years Experience</div>
+            </div>
+            <div className="text-center">
+              <div className="text-3xl font-bold gradient-gold"><AnimatedCounter value={2} /></div>
               <div className="text-xs text-gray-400 uppercase tracking-wider mt-1">Active Listings</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold gradient-gold"><AnimatedCounter value={10} suffix="+" /></div>
-              <div className="text-xs text-gray-400 uppercase tracking-wider mt-1">Years Experience</div>
+              <div className="text-3xl font-bold gradient-gold">Tulsa</div>
+              <div className="text-xs text-gray-400 uppercase tracking-wider mt-1">Native</div>
             </div>
           </div>
         </motion.div>
@@ -134,12 +130,12 @@ export default function Home() {
               },
               {
                 title: 'Proven Results',
-                desc: `${agent.reviewCount} five-star reviews do not happen by accident. Clients praise Kandice's responsiveness, negotiation skills, and ability to close deals smoothly.`,
+                desc: 'Clients praise Kandice for her responsiveness, strong negotiation skills, and ability to close deals smoothly. She treats every transaction like it is her own.',
                 icon: 'M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z',
               },
               {
                 title: 'No Pressure, Ever',
-                desc: 'Kandice offers free consultations with zero obligation. She will tell you if now is not the right time to sell, and she will never rush you into a decision.',
+                desc: 'Kandice offers free consultations with zero obligation. She never rushes you into a decision, but she also never lets an opportunity slip away. Your timeline is her timeline.',
                 icon: 'M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z',
               },
             ].map((card, i) => (
@@ -159,57 +155,34 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Client Love */}
+      {/* What to Expect */}
       <section className="bg-navy text-white py-24 px-4">
         <div className="max-w-4xl mx-auto text-center">
           <FadeIn>
-            <div className="flex justify-center gap-1 mb-6">
-              {[...Array(5)].map((_, i) => (
-                <svg key={i} className="w-8 h-8 text-gold" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M12 0L14.59 9.41L24 12L14.59 14.59L12 24L9.41 14.59L0 12L9.41 9.41L12 0Z" />
-                </svg>
-              ))}
-            </div>
-            <h2 className="text-3xl sm:text-4xl font-bold mb-4">Loved by Tulsa Homeowners</h2>
-            <p className="text-gray-300 max-w-xl mx-auto mb-10 leading-relaxed">
-              {agent.name} has earned {agent.reviewCount} five-star reviews from buyers and sellers across Northeast Oklahoma. Here is what a few of them had to say.
+            <p className="text-gold text-sm font-semibold uppercase tracking-[0.2em] mb-4">The Kandice Experience</p>
+            <h2 className="text-3xl sm:text-4xl font-bold mb-4">What Working With Kandice Looks Like</h2>
+            <p className="text-gray-300 max-w-xl mx-auto mb-12 leading-relaxed">
+              Every client gets the same energy, expertise, and dedication — whether you are buying your first home or selling your fifth.
             </p>
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 text-left">
+            <div className="grid sm:grid-cols-3 gap-8 text-left">
               {[
-                { quote: 'Kandice made buying our first home so easy. She was available every time we had a question and negotiated a great price for us.', name: 'Sarah M.', location: 'Tulsa, OK' },
-                { quote: 'We interviewed three agents before choosing Kandice. She sold our home in under two weeks for above asking price. Highly recommend!', name: 'David & Lisa K.', location: 'Broken Arrow, OK' },
-                { quote: 'As a single mom relocating to Tulsa, I needed someone patient who understood my budget. Kandice found the perfect home in Brookside.', name: 'Jennifer T.', location: 'Tulsa, OK' },
-              ].map((t, i) => (
+                { step: '01', title: 'Initial Consultation', desc: 'Free, no-obligation meeting to discuss your goals, timeline, and budget. Kandice listens first, then builds a plan.' },
+                { step: '02', title: 'Strategy & Search', desc: 'For buyers: curated listings that match your criteria. For sellers: a pricing and marketing strategy designed to maximize value.' },
+                { step: '03', title: 'Close With Confidence', desc: 'Kandice handles the paperwork, negotiations, and unexpected hiccups so you can focus on your next chapter.' },
+              ].map((item, i) => (
                 <motion.div
-                  key={i}
+                  key={item.step}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.15, duration: 0.5 }}
                   className="bg-white/5 backdrop-blur rounded-2xl p-6 border border-white/10"
                 >
-                  <div className="flex gap-1 mb-4">
-                    {[...Array(5)].map((_, j) => (
-                      <svg key={j} className="w-4 h-4 text-gold" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M12 0L14.59 9.41L24 12L14.59 14.59L12 24L9.41 14.59L0 12L9.41 9.41L12 0Z" />
-                      </svg>
-                    ))}
-                  </div>
-                  <p className="text-gray-200 text-sm leading-relaxed mb-4 italic">&ldquo;{t.quote}&rdquo;</p>
-                  <div className="text-sm">
-                    <p className="font-semibold text-white">{t.name}</p>
-                    <p className="text-gray-400">{t.location}</p>
-                  </div>
+                  <div className="text-gold text-3xl font-bold mb-3">{item.step}</div>
+                  <h3 className="text-lg font-bold text-white mb-2">{item.title}</h3>
+                  <p className="text-gray-300 text-sm leading-relaxed">{item.desc}</p>
                 </motion.div>
               ))}
-            </div>
-            <div className="mt-10">
-              <SparkleAnchor
-                href={agent.social.facebook || '#'}
-                className="inline-flex items-center rounded-xl bg-gold px-8 py-4 font-bold text-navy hover:bg-gold-hover transition-colors shadow-lg shadow-gold/20"
-              >
-                Read More Reviews on Facebook
-              </SparkleAnchor>
             </div>
           </FadeIn>
         </div>

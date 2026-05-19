@@ -53,7 +53,7 @@ export default function ListingDetail() {
               >
                 <img
                   src={listing.image}
-                  alt=""
+                  alt={listing.address}
                   className="w-full h-[20rem] sm:h-[28rem] object-cover"
                 />
               </motion.div>

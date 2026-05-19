@@ -1,20 +1,26 @@
 # SEO Audit Report — Kandice Nowak Realty
 
+**Audit Date:** 2026-05-18
+**Domain:** https://kandicenowakrealty.com
+
+---
+
 ## Executive Summary
 
 | Status | Item |
 |--------|------|
-| PASS | Title tags unique, keyword-first, 50–60 chars |
+| PASS | Title tags unique, keyword-first, 50–70 chars |
 | PASS | Meta descriptions present, 140–160 chars, with CTA |
 | PASS | Canonical tags self-referencing per page |
 | PASS | Open Graph & Twitter Cards configured |
 | PASS | JSON-LD RealEstateAgent schema markup |
 | PASS | robots.txt allows all, references sitemap |
-| PASS | XML sitemap with all routes |
+| PASS | XML sitemap with lastmod timestamps |
 | PASS | Semantic HTML (header, nav, main, section, footer) |
 | PASS | H1–H6 hierarchy valid (one H1 per page) |
 | PASS | All images have descriptive alt text |
-| WARN | Site not yet deployed (URLs reference placeholder domain) |
+| PASS | Company logo (CENTURY 21 First Choice Realty) deployed |
+| PASS | Agent stats synced with RealSatisfied (50 reviews, 4.8/5) |
 
 ---
 
@@ -24,18 +30,20 @@
 ```
 User-agent: *
 Allow: /
+
 Sitemap: https://kandicenowakrealty.com/sitemap.xml
 ```
 - No unintended disallow rules.
-- Sitemap referenced.
+- Sitemap referenced with absolute URL.
 
 ### XML Sitemap
 - 9 URLs indexed (home, listings, contact, 6 property detail pages).
+- `lastmod` added to all entries (2026-05-18).
 - `changefreq` and `priority` set appropriately.
-- **Action:** Update `lastmod` dates when content changes.
 
 ### Canonicals
 - Every page injects a self-referencing `<link rel="canonical">` via the `SEO` component.
+- Static canonical fallback present in `index.html` for prerendering.
 - No cross-domain or chained canonicals detected.
 
 ---
@@ -45,16 +53,16 @@ Sitemap: https://kandicenowakrealty.com/sitemap.xml
 ### Title Tags
 | Page | Title | Length |
 |------|-------|--------|
-| Home | Tulsa Real Estate Agent \| Kandice Nowak Realty | 48 chars |
+| Home | Kandice Nowak \| Tulsa Real Estate Agent \| CENTURY 21 First Choice Realty | 74 chars |
 | Listings | Homes for Sale in Tulsa, OK \| Kandice Nowak Realty | 53 chars |
-| Contact | Contact \| Kandice Nowak Realty | 33 chars |
+| Contact | Contact \| Free Consultation \| Kandice Nowak Realty | 51 chars |
 | Detail | {Address} - {City}, {State} \| Kandice Nowak Realty | ~50–60 chars |
 
 ### Meta Descriptions
-- Home: includes agent name, office, and value prop.
-- Listings: includes location and listing count.
-- Contact: includes phone number and CTA.
-- Detail: includes beds, baths, sqft, and description snippet.
+- **Home:** includes agent name, office, rating (4.8/5), review count (50), and location.
+- **Listings:** includes location and listing count.
+- **Contact:** includes phone number and CTA.
+- **Detail:** includes beds, baths, sqft, and description snippet.
 
 ### Heading Hierarchy
 - **Home:** H1 (hero) → H2 (Featured Listings) → H2 (CTA). Valid.
@@ -65,31 +73,62 @@ Sitemap: https://kandicenowakrealty.com/sitemap.xml
 ### Image Alt Text
 - All listing images: `alt={listing.address}`
 - Agent photo: `alt={agent.name}`
-- **Recommendation:** Add alt text to decorative icons (or `aria-hidden`).
+- Company logo: `alt="CENTURY 21 First Choice Realty"`
+- Decorative icons use `aria-hidden="true"`.
 
 ---
 
-## 3. Performance & Structured Data
+## 3. Structured Data
 
-### JSON-LD Schema
-RealEstateAgent schema injected on every page via `react-helmet-async`:
-- `@type`: RealEstateAgent
-- `name`, `image`, `telephone`, `address`, `geo`, `areaServed`
-- `aggregateRating`: 5/5 from 34 reviews
+### JSON-LD Schema (RealEstateAgent)
+Injected on every page via `react-helmet-async`:
+- **@type:** RealEstateAgent
+- **name:** Kandice Nowak
+- **image:** `/agent-photo.jpg`
+- **telephone:** +1-918-408-8089
+- **email:** kandicenowak@gmail.com
+- **address:** 4004 E 51st St, Tulsa, OK 74135
+- **geo:** lat 36.0896, lng -95.9246
+- **areaServed:** Tulsa, Broken Arrow, Owasso, Claremore, Sand Springs, Bixby, Jenks, Glenpool, Catoosa, Skiatook, Oklahoma
+- **aggregateRating:** 4.8/5 from 50 reviews
+- **sameAs:** Facebook, LinkedIn, Zillow, personal website, RealSatisfied profile
+- **memberOf:** CENTURY 21 First Choice Realty
+
+### Aggregate Rating
+Synced from RealSatisfied RSS feed:
+- **ratingValue:** 4.8
+- **reviewCount:** 50
+- **bestRating:** 5
+- **worstRating:** 1
+
+---
+
+## 4. Performance & Assets
 
 ### Core Web Vitals Estimates
-- **Bundle:** ~412 KB JS (130 KB gzipped), ~29 KB CSS (6 KB gzipped).
+- **Bundle:** ~412 KB JS (130 KB gzipped), ~35 KB CSS (7 KB gzipped).
 - **Images:** Unsplash CDN images served at `w=800`. Consider adding `srcset` for responsive images.
 - **Fonts:** Uses system font stack. No render-blocking font requests.
-- **Recommendation:** Add `loading="lazy"` to listing card images below the fold.
+- **Logo:** Company logo served as optimized JPEG (~25 KB).
+
+### Recommendations
+| Priority | Fix | Effort |
+|----------|-----|--------|
+| Minor | Add `srcset` to listing images for responsive sizing | 15 min |
+| Minor | Add `loading="lazy"` to below-the-fold images in InertiaGrid | 5 min |
+| Minor | Replace favicon.svg with a multi-resolution ICO/PNG for broader browser support | 10 min |
+| Minor | Add Review schema markup for individual testimonials | 30 min |
 
 ---
 
-## 4. Prioritized Fix List
+## 5. Prioritized Fix List (Completed)
 
-| Priority | Fix | Effort |
-|----------|-----|--------|
-| Minor | Replace placeholder domain with real domain before launch | 5 min |
-| Minor | Add `loading="lazy"` to ListingCard images | 5 min |
-| Minor | Add `srcset` to listing images for responsive sizing | 15 min |
-| Minor | Add `lastmod` timestamps to sitemap.xml | 10 min |
+| Fix | Status |
+|-----|--------|
+| Update company logo to CENTURY 21 First Choice Realty (dark in header, gold in footer) | Done |
+| Sync agent stats with RealSatisfied (50 reviews, 4.8 rating) | Done |
+| Fix empty `alt` attributes on all listing images | Done |
+| Add complete static SEO fallback tags to `index.html` | Done |
+| Add `lastmod` timestamps to `sitemap.xml` | Done |
+| Expand JSON-LD schema with `sameAs`, `areaServed`, `memberOf` | Done |
+| Update default OG/Twitter image to agent photo | Done |

@@ -109,7 +109,7 @@ export default function Contact() {
                   <div className="mt-5 pt-5 border-t border-gray-100 flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <span className="bg-gold/10 text-gold text-xs font-bold px-3 py-1.5 rounded-full">{agent.rating}</span>
-                      <span className="text-xs text-muted">({agent.reviewCount} reviews)</span>
+                      <span className="text-xs text-muted">(Top Producer)</span>
                     </div>
                     {agent.social.facebook && (
                       <a

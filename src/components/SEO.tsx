@@ -12,7 +12,7 @@ export default function SEO({
   title,
   description,
   pathname = '',
-  image = 'https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=1200&auto=format&fit=crop',
+  image = 'https://kandicenowakrealty.com/agent-photo.jpg',
   type = 'website',
 }: SEOProps) {
   const siteUrl = 'https://kandicenowakrealty.com';
@@ -26,6 +26,7 @@ export default function SEO({
     image: `${siteUrl}/agent-photo.jpg`,
     url: siteUrl,
     telephone: '+1-918-408-8089',
+    email: 'kandicenowak@gmail.com',
     address: {
       '@type': 'PostalAddress',
       streetAddress: '4004 E 51st St',
@@ -39,15 +40,38 @@ export default function SEO({
       latitude: 36.0896,
       longitude: -95.9246,
     },
-    areaServed: {
-      '@type': 'City',
-      name: 'Tulsa',
-    },
+    areaServed: [
+      { '@type': 'City', name: 'Tulsa' },
+      { '@type': 'City', name: 'Broken Arrow' },
+      { '@type': 'City', name: 'Owasso' },
+      { '@type': 'City', name: 'Claremore' },
+      { '@type': 'City', name: 'Sand Springs' },
+      { '@type': 'City', name: 'Bixby' },
+      { '@type': 'City', name: 'Jenks' },
+      { '@type': 'City', name: 'Glenpool' },
+      { '@type': 'City', name: 'Catoosa' },
+      { '@type': 'City', name: 'Skiatook' },
+      { '@type': 'State', name: 'Oklahoma' },
+    ],
     priceRange: '$$$',
     aggregateRating: {
       '@type': 'AggregateRating',
-      ratingValue: '5',
-      reviewCount: '34',
+      ratingValue: '4.8',
+      reviewCount: '50',
+      bestRating: '5',
+      worstRating: '1',
+    },
+    sameAs: [
+      'https://www.facebook.com/profile.php?id=100063687033272',
+      'https://www.linkedin.com/in/kandice-nowak-a257912a4/',
+      'https://www.zillow.com/profile/kandicenowak',
+      'https://kandicenowak.sites.c21.homes/',
+      'https://profile.realsatisfied.com/Kandice-Nowak',
+    ],
+    memberOf: {
+      '@type': 'RealEstateAgent',
+      name: 'CENTURY 21 First Choice Realty',
+      url: 'https://www.century21.com',
     },
   };
 

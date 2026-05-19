@@ -69,7 +69,7 @@ export default function Layout() {
       <header className="sticky top-0 z-50 glass-light shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <Link to="/" className="hover:opacity-80 transition-opacity">
-            <Logo />
+            <Logo variant="dark" />
           </Link>
 
           {/* Desktop Nav */}
@@ -200,7 +200,7 @@ export default function Layout() {
             className="grid sm:grid-cols-3 gap-8 mb-8"
           >
             <div>
-              <Logo className="mb-4" />
+              <Logo variant="light" className="mb-4" />
               <p className="text-gray-400 text-sm">{agent.office}</p>
               <p className="text-gray-400 text-sm">{agent.address}</p>
             </div>
@@ -222,7 +222,7 @@ export default function Layout() {
             <div>
               <h4 className="font-semibold mb-2 text-sm uppercase tracking-wider text-gray-400">Rating</h4>
               <p className="text-2xl font-bold gradient-gold">{agent.rating}</p>
-              <p className="text-sm text-gray-400">({agent.reviewCount} reviews)</p>
+              <p className="text-sm text-gray-400">Top Producer</p>
             </div>
           </motion.div>
           <div className="border-t border-gray-800 pt-8 text-center text-xs text-gray-500">
