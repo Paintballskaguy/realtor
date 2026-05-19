@@ -42,10 +42,33 @@ function StarRating() {
   );
 }
 
+/* Staggered fade-up for text elements inside the active card */
+function StaggerItem({
+  children,
+  delay = 0,
+  className = '',
+}: {
+  children: React.ReactNode;
+  delay?: number;
+  className?: string;
+}) {
+  return (
+    <motion.div
+      className={className}
+      initial={{ opacity: 0, y: 14 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay, duration: 0.4, ease: [0.32, 0.72, 0, 1] }}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
 export default function Testimonials() {
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
   const [direction, setDirection] = useState(1);
+  const [progress, setProgress] = useState(0);
   const animatingRef = useRef(false);
 
   const paginate = useCallback((newDirection: number) => {
@@ -66,6 +89,7 @@ export default function Testimonials() {
   const next = useCallback(() => paginate(1), [paginate]);
   const prev = useCallback(() => paginate(-1), [paginate]);
 
+  /* Auto-rotate timer — resets when index changes (manual nav) or pause toggles */
   useEffect(() => {
     if (paused) return;
     const timer = setInterval(() => {
@@ -73,7 +97,24 @@ export default function Testimonials() {
       paginate(1);
     }, 6000);
     return () => clearInterval(timer);
-  }, [paused, paginate]);
+  }, [paused, paginate, index]);
+
+  /* Progress bar — resets on index change, pauses when hovered */
+  useEffect(() => {
+    setProgress(0);
+  }, [index]);
+
+  useEffect(() => {
+    if (paused) return;
+    setProgress(0);
+    const interval = setInterval(() => {
+      setProgress((p) => {
+        if (p >= 1) return 1;
+        return p + 0.0167;
+      });
+    }, 100);
+    return () => clearInterval(interval);
+  }, [paused, index]);
 
   const activeReview = reviews[index];
 
@@ -102,6 +143,15 @@ export default function Testimonials() {
           onMouseEnter={() => setPaused(true)}
           onMouseLeave={() => setPaused(false)}
         >
+          {/* Progress bar */}
+          <div className="relative h-0.5 mb-3 bg-gray-200 rounded-full overflow-hidden">
+            <motion.div
+              className="absolute inset-y-0 left-0 bg-gold rounded-full"
+              animate={{ width: `${progress * 100}%` }}
+              transition={{ duration: 0 }}
+            />
+          </div>
+
           {/* Card Stack with 3D perspective */}
           <div
             className="relative h-[420px] sm:h-[380px]"
@@ -155,11 +205,11 @@ export default function Testimonials() {
               );
             })}
 
-            {/* Active card — 3D slide/flip animation */}
+            {/* Active card — 3D slide/flip + drag + hover lift + staggered reveal */}
             <AnimatePresence mode="wait" initial={false}>
               <motion.div
                 key={index}
-                className="absolute inset-0 rounded-2xl bg-white border border-gray-100 shadow-2xl p-8 sm:p-10 text-center overflow-y-auto"
+                className="absolute inset-0 rounded-2xl bg-white border border-gray-100 shadow-2xl p-8 sm:p-10 text-center overflow-y-auto cursor-grab active:cursor-grabbing"
                 initial={{
                   x: direction > 0 ? 350 : -350,
                   opacity: 0,
@@ -181,38 +231,52 @@ export default function Testimonials() {
                   rotateZ: direction > 0 ? -4 : 4,
                   scale: 0.88,
                 }}
+                whileHover={{ y: -4, transition: { duration: 0.25 } }}
+                drag="x"
+                dragConstraints={{ left: 0, right: 0 }}
+                dragElastic={0.15}
+                onDragEnd={(_, info) => {
+                  if (info.offset.x > 80) paginate(-1);
+                  else if (info.offset.x < -80) paginate(1);
+                }}
                 transition={{
                   duration: 0.4,
                   ease: [0.32, 0.72, 0, 1],
                 }}
                 style={{ zIndex: 20, transformStyle: 'preserve-3d' }}
               >
-                <div className="flex justify-center mb-6">
-                  <svg
-                    className="w-10 h-10 text-gold/30"
-                    fill="currentColor"
-                    viewBox="0 0 24 24"
-                    aria-hidden="true"
-                  >
-                    <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
-                  </svg>
-                </div>
-
-                <blockquote className="text-lg sm:text-xl text-navy leading-relaxed mb-8 max-w-2xl mx-auto">
-                  &ldquo;{activeReview.testimonial}&rdquo;
-                </blockquote>
-
-                <div className="flex flex-col items-center gap-1">
-                  <p className="font-bold text-navy">{activeReview.client}</p>
-                  <div className="flex items-center gap-2 text-sm text-muted">
-                    <span className="bg-gold/10 text-gold text-xs font-bold px-2.5 py-0.5 rounded-full">
-                      {activeReview.type}
-                    </span>
-                    <span>&bull;</span>
-                    <span>{formatDate(activeReview.date)}</span>
+                <StaggerItem delay={0.08}>
+                  <div className="flex justify-center mb-6">
+                    <svg
+                      className="w-10 h-10 text-gold/30"
+                      fill="currentColor"
+                      viewBox="0 0 24 24"
+                      aria-hidden="true"
+                    >
+                      <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
+                    </svg>
                   </div>
-                  <p className="text-xs text-muted mt-1">Verified by RealSatisfied</p>
-                </div>
+                </StaggerItem>
+
+                <StaggerItem delay={0.18} className="mb-8">
+                  <blockquote className="text-lg sm:text-xl text-navy leading-relaxed max-w-2xl mx-auto">
+                    &ldquo;{activeReview.testimonial}&rdquo;
+                  </blockquote>
+                </StaggerItem>
+
+                <StaggerItem delay={0.28}>
+                  <div className="flex flex-col items-center gap-1">
+                    <p className="font-bold text-navy">{activeReview.client}</p>
+                    <div className="flex items-center gap-2 text-sm text-muted">
+                      <span className="bg-gold/10 text-gold text-xs font-bold px-2.5 py-0.5 rounded-full">
+                        {activeReview.type}
+                      </span>
+                      <span>&bull;</span>
+                      <span>{formatDate(activeReview.date)}</span>
+                    </div>
+                    <p className="text-xs text-muted mt-1">Verified by RealSatisfied</p>
+                  </div>
+                </StaggerItem>
               </motion.div>
             </AnimatePresence>
           </div>
