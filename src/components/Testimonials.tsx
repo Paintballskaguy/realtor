@@ -42,31 +42,71 @@ function StarRating() {
   );
 }
 
+const STACK_DEPTH = 2;
+
+const cardVariants = {
+  enter: (direction: number) => ({
+    x: direction > 0 ? 350 : -350,
+    rotateZ: direction > 0 ? 8 : -8,
+    opacity: 0,
+    scale: 0.9,
+  }),
+  center: {
+    x: 0,
+    rotateZ: 0,
+    opacity: 1,
+    scale: 1,
+  },
+  exit: (direction: number) => ({
+    x: direction > 0 ? -350 : 350,
+    rotateZ: direction > 0 ? -8 : 8,
+    opacity: 0,
+    scale: 0.9,
+  }),
+};
+
 export default function Testimonials() {
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
+  const [direction, setDirection] = useState(1);
+  const [isAnimating, setIsAnimating] = useState(false);
 
-  const next = useCallback(() => {
-    setIndex((prev) => (prev + 1) % reviews.length);
-  }, []);
+  const paginate = useCallback(
+    (newDirection: number) => {
+      if (isAnimating) return;
+      setIsAnimating(true);
+      setDirection(newDirection);
+      setIndex((prev) => {
+        let next = prev + newDirection;
+        if (next < 0) next = reviews.length - 1;
+        if (next >= reviews.length) next = 0;
+        return next;
+      });
+    },
+    [isAnimating]
+  );
 
-  const prev = useCallback(() => {
-    setIndex((prev) => (prev - 1 + reviews.length) % reviews.length);
-  }, []);
+  const next = useCallback(() => paginate(1), [paginate]);
+  const prev = useCallback(() => paginate(-1), [paginate]);
 
   useEffect(() => {
-    if (paused) return;
-    const timer = setInterval(next, 6000);
+    if (paused || isAnimating) return;
+    const timer = setInterval(() => paginate(1), 6000);
     return () => clearInterval(timer);
-  }, [paused, next]);
+  }, [paused, isAnimating, paginate]);
 
-  const current = reviews[index];
+  const activeReview = reviews[index];
+
+  /* Background cards are the ones AFTER the active card */
+  const bgIndices = Array.from({ length: STACK_DEPTH }, (_, i) =>
+    (index + 1 + i) % reviews.length
+  );
 
   return (
     <section className="bg-cream py-24 px-4 overflow-hidden">
-      <div className="max-w-5xl mx-auto">
+      <div className="max-w-3xl mx-auto">
         <FadeIn>
-          <div className="text-center mb-12">
+          <div className="text-center mb-16">
             <p className="text-gold text-sm font-semibold uppercase tracking-[0.2em] mb-4">
               Client Reviews
             </p>
@@ -83,22 +123,33 @@ export default function Testimonials() {
         </FadeIn>
 
         <div
-          className="relative"
+          className="relative select-none"
           onMouseEnter={() => setPaused(true)}
           onMouseLeave={() => setPaused(false)}
         >
-          {/* Card */}
-          <div className="relative min-h-[280px] flex items-center justify-center">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={current.guid}
-                initial={{ opacity: 0, x: 40 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -40 }}
-                transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
-                className="w-full"
-              >
-                <div className="bg-white rounded-2xl border border-gray-100 shadow-lg p-8 sm:p-10 text-center">
+          {/* Card Stack */}
+          <div className="relative h-[380px] sm:h-[340px]">
+            {/* Background cards */}
+            {bgIndices.map((reviewIdx, i) => {
+              const review = reviews[reviewIdx];
+              const depth = i + 1;
+              return (
+                <motion.div
+                  key={review.guid}
+                  className="absolute inset-0 rounded-2xl bg-white border border-gray-100 shadow-lg p-8 sm:p-10 text-center"
+                  initial={false}
+                  animate={{
+                    scale: 1 - depth * 0.05,
+                    y: depth * 12,
+                    opacity: 1 - depth * 0.22,
+                  }}
+                  transition={{
+                    type: 'spring',
+                    stiffness: 400,
+                    damping: 32,
+                  }}
+                  style={{ zIndex: 10 - depth }}
+                >
                   <div className="flex justify-center mb-6">
                     <svg
                       className="w-10 h-10 text-gold/30"
@@ -109,53 +160,110 @@ export default function Testimonials() {
                       <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
                     </svg>
                   </div>
-
-                  <blockquote className="text-lg sm:text-xl text-navy leading-relaxed mb-8 max-w-3xl mx-auto">
-                    “{current.testimonial}”
+                  <blockquote className="text-lg sm:text-xl text-navy/50 leading-relaxed mb-8 max-w-2xl mx-auto line-clamp-4">
+                    “{review.testimonial}”
                   </blockquote>
-
                   <div className="flex flex-col items-center gap-1">
-                    <p className="font-bold text-navy">{current.client}</p>
+                    <p className="font-bold text-navy/60">{review.client}</p>
                     <div className="flex items-center gap-2 text-sm text-muted">
                       <span className="bg-gold/10 text-gold text-xs font-bold px-2.5 py-0.5 rounded-full">
-                        {current.type}
+                        {review.type}
                       </span>
                       <span>&bull;</span>
-                      <span>{formatDate(current.date)}</span>
+                      <span>{formatDate(review.date)}</span>
                     </div>
                     <p className="text-xs text-muted mt-1">Verified by RealSatisfied</p>
                   </div>
+                </motion.div>
+              );
+            })}
+
+            {/* Active card */}
+            <AnimatePresence initial={false} custom={direction}>
+              <motion.div
+                key={activeReview.guid}
+                className="absolute inset-0 rounded-2xl bg-white border border-gray-100 shadow-2xl p-8 sm:p-10 text-center"
+                custom={direction}
+                variants={cardVariants}
+                initial="enter"
+                animate="center"
+                exit="exit"
+                transition={{
+                  x: { type: 'spring', stiffness: 300, damping: 28 },
+                  opacity: { duration: 0.25 },
+                  rotateZ: { type: 'spring', stiffness: 300, damping: 28 },
+                  scale: { type: 'spring', stiffness: 300, damping: 28 },
+                }}
+                style={{ zIndex: 20 }}
+                onAnimationComplete={() => setIsAnimating(false)}
+              >
+                <div className="flex justify-center mb-6">
+                  <svg
+                    className="w-10 h-10 text-gold/30"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
+                  >
+                    <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
+                  </svg>
+                </div>
+
+                <blockquote className="text-lg sm:text-xl text-navy leading-relaxed mb-8 max-w-2xl mx-auto">
+                  “{activeReview.testimonial}”
+                </blockquote>
+
+                <div className="flex flex-col items-center gap-1">
+                  <p className="font-bold text-navy">{activeReview.client}</p>
+                  <div className="flex items-center gap-2 text-sm text-muted">
+                    <span className="bg-gold/10 text-gold text-xs font-bold px-2.5 py-0.5 rounded-full">
+                      {activeReview.type}
+                    </span>
+                    <span>&bull;</span>
+                    <span>{formatDate(activeReview.date)}</span>
+                  </div>
+                  <p className="text-xs text-muted mt-1">Verified by RealSatisfied</p>
                 </div>
               </motion.div>
             </AnimatePresence>
           </div>
 
           {/* Arrows */}
-          <button
-            onClick={prev}
-            aria-label="Previous review"
-            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 sm:-translate-x-6 w-10 h-10 rounded-full bg-white border border-gray-200 shadow-sm flex items-center justify-center text-navy hover:border-gold hover:text-gold transition-colors"
-          >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-            </svg>
-          </button>
-          <button
-            onClick={next}
-            aria-label="Next review"
-            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-2 sm:translate-x-6 w-10 h-10 rounded-full bg-white border border-gray-200 shadow-sm flex items-center justify-center text-navy hover:border-gold hover:text-gold transition-colors"
-          >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-            </svg>
-          </button>
+          <div className="flex justify-center gap-4 mt-10">
+            <motion.button
+              onClick={prev}
+              aria-label="Previous review"
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+              className="w-12 h-12 rounded-full bg-white border border-gray-200 shadow-md flex items-center justify-center text-navy hover:border-gold hover:text-gold transition-colors"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
+            </motion.button>
+            <motion.button
+              onClick={next}
+              aria-label="Next review"
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+              className="w-12 h-12 rounded-full bg-white border border-gray-200 shadow-md flex items-center justify-center text-navy hover:border-gold hover:text-gold transition-colors"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </motion.button>
+          </div>
 
           {/* Dots */}
-          <div className="flex justify-center gap-2 mt-8">
+          <div className="flex justify-center gap-2 mt-6">
             {reviews.map((r, i) => (
               <button
                 key={r.guid}
-                onClick={() => setIndex(i)}
+                onClick={() => {
+                  if (isAnimating || i === index) return;
+                  setDirection(i > index ? 1 : -1);
+                  setIsAnimating(true);
+                  setIndex(i);
+                }}
                 aria-label={`Go to review ${i + 1}`}
                 aria-current={i === index ? 'true' : undefined}
                 className={`h-2 rounded-full transition-all duration-300 ${
