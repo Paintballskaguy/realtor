@@ -6,6 +6,7 @@ import AgentCard from '../components/AgentCard';
 import ParticleCanvas from '../components/ParticleCanvas';
 
 import InertiaGrid from '../components/InertiaGrid';
+import Testimonials from '../components/Testimonials';
 import SEO from '../components/SEO';
 import { FadeIn } from '../components/Motion';
 import { SparkleLink, SparkleAnchor } from '../components/SparkleButton';
@@ -108,6 +109,8 @@ export default function Home() {
       </section>
 
       <InertiaGrid listings={featured} title="Featured Listings" subtitle="Properties" />
+
+      <Testimonials />
 
       {/* Why Kandice */}
       <section className="bg-cream py-24 px-4">
