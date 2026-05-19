@@ -102,19 +102,29 @@ export default function Testimonials() {
           onMouseEnter={() => setPaused(true)}
           onMouseLeave={() => setPaused(false)}
         >
-          {/* Card Stack */}
-          <div className="relative h-[380px] sm:h-[340px]">
-            {/* Background cards — stable keys, content updates with index */}
-            {[1, 2].map((offset) => {
+          {/* Card Stack with 3D perspective */}
+          <div
+            className="relative h-[420px] sm:h-[380px]"
+            style={{ perspective: '1200px', perspectiveOrigin: '50% 50%' }}
+          >
+            {/* Background cards — stable keys, fanned in 3D space */}
+            {[1, 2, 3].map((offset) => {
               const review = reviews[(index + offset) % reviews.length];
+              const isLeftFan = direction > 0;
               return (
                 <div
                   key={`bg-${offset}`}
                   className="absolute inset-0 rounded-2xl bg-white border border-gray-100 shadow-lg p-8 sm:p-10 text-center"
                   style={{
-                    transform: `scale(${1 - offset * 0.05}) translateY(${offset * 12}px)`,
-                    opacity: 1 - offset * 0.22,
+                    transform: `
+                      scale(${1 - offset * 0.05})
+                      translateY(${offset * 12}px)
+                      translateZ(${-offset * 40}px)
+                      rotateY(${isLeftFan ? offset * 2 : -offset * 2}deg)
+                    `,
+                    opacity: 1 - offset * 0.18,
                     zIndex: 10 - offset,
+                    transformStyle: 'preserve-3d',
                   }}
                 >
                   <div className="flex justify-center mb-6">
@@ -145,34 +155,37 @@ export default function Testimonials() {
               );
             })}
 
-            {/* Active card — AnimatePresence with mode="wait" and inline props */}
+            {/* Active card — 3D slide/flip animation */}
             <AnimatePresence mode="wait" initial={false}>
               <motion.div
                 key={index}
-                className="absolute inset-0 rounded-2xl bg-white border border-gray-100 shadow-2xl p-8 sm:p-10 text-center"
+                className="absolute inset-0 rounded-2xl bg-white border border-gray-100 shadow-2xl p-8 sm:p-10 text-center overflow-y-auto"
                 initial={{
                   x: direction > 0 ? 350 : -350,
                   opacity: 0,
-                  rotateZ: direction > 0 ? 6 : -6,
-                  scale: 0.92,
+                  rotateY: direction > 0 ? -30 : 30,
+                  rotateZ: direction > 0 ? 4 : -4,
+                  scale: 0.88,
                 }}
                 animate={{
                   x: 0,
                   opacity: 1,
+                  rotateY: 0,
                   rotateZ: 0,
                   scale: 1,
                 }}
                 exit={{
                   x: direction > 0 ? -350 : 350,
                   opacity: 0,
-                  rotateZ: direction > 0 ? -6 : 6,
-                  scale: 0.92,
+                  rotateY: direction > 0 ? 30 : -30,
+                  rotateZ: direction > 0 ? -4 : 4,
+                  scale: 0.88,
                 }}
                 transition={{
-                  duration: 0.35,
-                  ease: [0.4, 0, 0.2, 1],
+                  duration: 0.4,
+                  ease: [0.32, 0.72, 0, 1],
                 }}
-                style={{ zIndex: 20 }}
+                style={{ zIndex: 20, transformStyle: 'preserve-3d' }}
               >
                 <div className="flex justify-center mb-6">
                   <svg
