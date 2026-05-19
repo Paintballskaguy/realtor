@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import reviewsData from '../data/reviews.json';
 import { FadeIn } from './Motion';
@@ -42,65 +42,40 @@ function StarRating() {
   );
 }
 
-const STACK_DEPTH = 2;
-
-const cardVariants = {
-  enter: (direction: number) => ({
-    x: direction > 0 ? 350 : -350,
-    rotateZ: direction > 0 ? 8 : -8,
-    opacity: 0,
-    scale: 0.9,
-  }),
-  center: {
-    x: 0,
-    rotateZ: 0,
-    opacity: 1,
-    scale: 1,
-  },
-  exit: (direction: number) => ({
-    x: direction > 0 ? -350 : 350,
-    rotateZ: direction > 0 ? -8 : 8,
-    opacity: 0,
-    scale: 0.9,
-  }),
-};
-
 export default function Testimonials() {
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
   const [direction, setDirection] = useState(1);
-  const [isAnimating, setIsAnimating] = useState(false);
+  const animatingRef = useRef(false);
 
-  const paginate = useCallback(
-    (newDirection: number) => {
-      if (isAnimating) return;
-      setIsAnimating(true);
-      setDirection(newDirection);
-      setIndex((prev) => {
-        let next = prev + newDirection;
-        if (next < 0) next = reviews.length - 1;
-        if (next >= reviews.length) next = 0;
-        return next;
-      });
-    },
-    [isAnimating]
-  );
+  const paginate = useCallback((newDirection: number) => {
+    if (animatingRef.current) return;
+    animatingRef.current = true;
+    setDirection(newDirection);
+    setIndex((prev) => {
+      let next = prev + newDirection;
+      if (next < 0) next = reviews.length - 1;
+      if (next >= reviews.length) next = 0;
+      return next;
+    });
+    setTimeout(() => {
+      animatingRef.current = false;
+    }, 750);
+  }, []);
 
   const next = useCallback(() => paginate(1), [paginate]);
   const prev = useCallback(() => paginate(-1), [paginate]);
 
   useEffect(() => {
-    if (paused || isAnimating) return;
-    const timer = setInterval(() => paginate(1), 6000);
+    if (paused) return;
+    const timer = setInterval(() => {
+      if (animatingRef.current) return;
+      paginate(1);
+    }, 6000);
     return () => clearInterval(timer);
-  }, [paused, isAnimating, paginate]);
+  }, [paused, paginate]);
 
   const activeReview = reviews[index];
-
-  /* Background cards are the ones AFTER the active card */
-  const bgIndices = Array.from({ length: STACK_DEPTH }, (_, i) =>
-    (index + 1 + i) % reviews.length
-  );
 
   return (
     <section className="bg-cream py-24 px-4 overflow-hidden">
@@ -129,26 +104,18 @@ export default function Testimonials() {
         >
           {/* Card Stack */}
           <div className="relative h-[380px] sm:h-[340px]">
-            {/* Background cards */}
-            {bgIndices.map((reviewIdx, i) => {
-              const review = reviews[reviewIdx];
-              const depth = i + 1;
+            {/* Background cards — stable keys, content updates with index */}
+            {[1, 2].map((offset) => {
+              const review = reviews[(index + offset) % reviews.length];
               return (
-                <motion.div
-                  key={review.guid}
+                <div
+                  key={`bg-${offset}`}
                   className="absolute inset-0 rounded-2xl bg-white border border-gray-100 shadow-lg p-8 sm:p-10 text-center"
-                  initial={false}
-                  animate={{
-                    scale: 1 - depth * 0.05,
-                    y: depth * 12,
-                    opacity: 1 - depth * 0.22,
+                  style={{
+                    transform: `scale(${1 - offset * 0.05}) translateY(${offset * 12}px)`,
+                    opacity: 1 - offset * 0.22,
+                    zIndex: 10 - offset,
                   }}
-                  transition={{
-                    type: 'spring',
-                    stiffness: 400,
-                    damping: 32,
-                  }}
-                  style={{ zIndex: 10 - depth }}
                 >
                   <div className="flex justify-center mb-6">
                     <svg
@@ -161,7 +128,7 @@ export default function Testimonials() {
                     </svg>
                   </div>
                   <blockquote className="text-lg sm:text-xl text-navy/50 leading-relaxed mb-8 max-w-2xl mx-auto line-clamp-4">
-                    “{review.testimonial}”
+                    &ldquo;{review.testimonial}&rdquo;
                   </blockquote>
                   <div className="flex flex-col items-center gap-1">
                     <p className="font-bold text-navy/60">{review.client}</p>
@@ -174,28 +141,38 @@ export default function Testimonials() {
                     </div>
                     <p className="text-xs text-muted mt-1">Verified by RealSatisfied</p>
                   </div>
-                </motion.div>
+                </div>
               );
             })}
 
-            {/* Active card */}
-            <AnimatePresence initial={false} custom={direction}>
+            {/* Active card — AnimatePresence with mode="wait" and inline props */}
+            <AnimatePresence mode="wait" initial={false}>
               <motion.div
-                key={activeReview.guid}
+                key={index}
                 className="absolute inset-0 rounded-2xl bg-white border border-gray-100 shadow-2xl p-8 sm:p-10 text-center"
-                custom={direction}
-                variants={cardVariants}
-                initial="enter"
-                animate="center"
-                exit="exit"
+                initial={{
+                  x: direction > 0 ? 350 : -350,
+                  opacity: 0,
+                  rotateZ: direction > 0 ? 6 : -6,
+                  scale: 0.92,
+                }}
+                animate={{
+                  x: 0,
+                  opacity: 1,
+                  rotateZ: 0,
+                  scale: 1,
+                }}
+                exit={{
+                  x: direction > 0 ? -350 : 350,
+                  opacity: 0,
+                  rotateZ: direction > 0 ? -6 : 6,
+                  scale: 0.92,
+                }}
                 transition={{
-                  x: { type: 'spring', stiffness: 300, damping: 28 },
-                  opacity: { duration: 0.25 },
-                  rotateZ: { type: 'spring', stiffness: 300, damping: 28 },
-                  scale: { type: 'spring', stiffness: 300, damping: 28 },
+                  duration: 0.35,
+                  ease: [0.4, 0, 0.2, 1],
                 }}
                 style={{ zIndex: 20 }}
-                onAnimationComplete={() => setIsAnimating(false)}
               >
                 <div className="flex justify-center mb-6">
                   <svg
@@ -209,7 +186,7 @@ export default function Testimonials() {
                 </div>
 
                 <blockquote className="text-lg sm:text-xl text-navy leading-relaxed mb-8 max-w-2xl mx-auto">
-                  “{activeReview.testimonial}”
+                  &ldquo;{activeReview.testimonial}&rdquo;
                 </blockquote>
 
                 <div className="flex flex-col items-center gap-1">
@@ -259,10 +236,13 @@ export default function Testimonials() {
               <button
                 key={r.guid}
                 onClick={() => {
-                  if (isAnimating || i === index) return;
+                  if (animatingRef.current || i === index) return;
+                  animatingRef.current = true;
                   setDirection(i > index ? 1 : -1);
-                  setIsAnimating(true);
                   setIndex(i);
+                  setTimeout(() => {
+                    animatingRef.current = false;
+                  }, 750);
                 }}
                 aria-label={`Go to review ${i + 1}`}
                 aria-current={i === index ? 'true' : undefined}
