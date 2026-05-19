@@ -19,9 +19,9 @@ export default function Listings() {
         <div className="relative z-10 max-w-7xl mx-auto">
           <FadeIn>
             <p className="text-gold text-sm font-semibold uppercase tracking-wider mb-2">Tulsa, Oklahoma</p>
-            <h1 className="text-4xl sm:text-5xl font-bold mb-3">All Listings</h1>
+            <h1 className="text-4xl sm:text-5xl font-bold mb-3">Homes for Sale in Tulsa, OK</h1>
             <p className="text-gray-400 max-w-xl">
-              Browse {mockListings.length} properties currently on the market in the Tulsa metro area.
+              Browse current properties in the Tulsa metro area. Want first pick? Kandice can send you new listings the day they hit the market.
             </p>
           </FadeIn>
         </div>

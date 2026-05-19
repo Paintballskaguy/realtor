@@ -142,8 +142,8 @@ export default function Contact() {
                   </div>
                 ) : (
                   <>
-                    <h2 className="text-2xl font-bold text-navy mb-2">Send a Message</h2>
-                    <p className="text-muted mb-8">Free consultation. No obligation. {agent.name.split(' ')[0]} typically responds within a few hours.</p>
+                    <h2 className="text-2xl font-bold text-navy mb-2">Get Your Free Consultation</h2>
+                    <p className="text-muted mb-8">Tell Kandice what you are looking for. She responds within a few hours — no pressure, ever.</p>
 
                     <form className="space-y-6" onSubmit={handleSubmit} noValidate>
                       {[
@@ -233,7 +233,7 @@ export default function Contact() {
                         type="submit"
                         className="w-full rounded-xl bg-navy px-6 py-4 font-bold text-white hover:bg-navy-light transition-colors shadow-lg shadow-navy/20"
                       >
-                        Send Message
+                        Start My Consultation
                       </SparkleButton>
                     </form>
                   </>

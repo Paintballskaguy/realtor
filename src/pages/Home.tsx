@@ -35,8 +35,8 @@ export default function Home() {
   return (
     <div>
       <SEO
-        title="Tulsa Real Estate Agent | 5-Star Reviews"
-        description={`${agent.name} is a 5-star Tulsa real estate agent with ${agent.office}. Free consultation. Browse homes for sale in Tulsa, OK.`}
+        title="Tulsa Real Estate Agent | Top-Rated Realtor"
+        description={`${agent.name} is a top-rated Tulsa real estate agent with ${agent.office}. 4.8/5 stars from 50 clients. Free consultation. Browse homes for sale in Tulsa, OK.`}
         pathname="/"
       />
 
@@ -53,10 +53,10 @@ export default function Home() {
               {agent.office} &bull; Free Consultation
             </p>
             <h1 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight mb-6">
-              Buy or Sell Your <span className="gradient-gold">Tulsa</span> Home
+              Your Tulsa Home, <span className="gradient-gold">Without the Headaches</span>
             </h1>
             <p className="text-lg sm:text-xl text-gray-300 max-w-2xl mx-auto mb-10 leading-relaxed">
-              {agent.name} puts clients first. No pressure. No surprises. Just honest guidance and results.
+              No pressure. No ghosting. Just honest guidance from a Tulsa native who answers her phone and treats every client like family.
             </p>
           </motion.div>
 
@@ -87,19 +87,57 @@ export default function Home() {
           transition={{ duration: 0.7, delay: 0.6 }}
           className="relative z-10 max-w-4xl mx-auto mt-16"
         >
-          <div className="glass rounded-2xl px-8 py-6 flex flex-wrap justify-center gap-8 sm:gap-16">
-            <div className="text-center">
-              <div className="text-3xl font-bold gradient-gold"><AnimatedCounter value={6} /></div>
-              <div className="text-xs text-gray-400 uppercase tracking-wider mt-1">Years Experience</div>
-            </div>
-            <div className="text-center">
-              <div className="text-3xl font-bold gradient-gold"><AnimatedCounter value={2} /></div>
-              <div className="text-xs text-gray-400 uppercase tracking-wider mt-1">Active Listings</div>
-            </div>
-            <div className="text-center">
-              <div className="text-3xl font-bold gradient-gold">Tulsa</div>
-              <div className="text-xs text-gray-400 uppercase tracking-wider mt-1">Native</div>
-            </div>
+          <div className="flex flex-wrap justify-center gap-4 sm:gap-6">
+            {[
+              {
+                icon: (
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                ),
+                value: <AnimatedCounter value={6} />,
+                label: 'Years Experience',
+              },
+              {
+                icon: (
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+                  </svg>
+                ),
+                value: (
+                  <span>
+                    <AnimatedCounter value={4} />.<AnimatedCounter value={8} />
+                  </span>
+                ),
+                label: '/ 5 Rating',
+              },
+              {
+                icon: (
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                ),
+                value: <span>99%</span>,
+                label: 'Would Recommend',
+              },
+            ].map((stat, i) => (
+              <motion.div
+                key={stat.label}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.8 + i * 0.1 }}
+                whileHover={{ y: -4, transition: { type: 'spring', stiffness: 400, damping: 20 } }}
+                className="flex items-center gap-3 bg-white/95 backdrop-blur-sm rounded-full pl-2 pr-5 py-2 shadow-lg shadow-black/10 border border-white/20"
+              >
+                <span className="flex items-center justify-center w-9 h-9 rounded-full bg-gold text-navy shadow-sm">
+                  {stat.icon}
+                </span>
+                <div className="flex items-baseline gap-1.5">
+                  <span className="text-lg font-bold text-navy">{stat.value}</span>
+                  <span className="text-xs font-medium text-navy/70 uppercase tracking-wider">{stat.label}</span>
+                </div>
+              </motion.div>
+            ))}
           </div>
         </motion.div>
       </section>
@@ -196,9 +234,9 @@ export default function Home() {
         <div className="max-w-3xl mx-auto text-center">
           <FadeIn>
             <p className="text-gold text-sm font-semibold uppercase tracking-[0.2em] mb-4">Stay Ahead of the Market</p>
-            <h2 className="text-3xl sm:text-4xl font-bold text-navy mb-4">Get New Listing Alerts</h2>
+            <h2 className="text-3xl sm:text-4xl font-bold text-navy mb-4">See the Best Homes First</h2>
             <p className="text-gray-600 mb-8 leading-relaxed">
-              The best homes in Tulsa move fast. Enter your email and Kandice will send you new listings that match your criteria before they hit the mainstream sites.
+              The best Tulsa listings sell in days — sometimes hours. Get hand-picked properties sent straight to your inbox before they show up on Zillow or Redfin.
             </p>
             <form
               className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto"
@@ -214,7 +252,7 @@ export default function Home() {
                 type="submit"
                 className="rounded-xl bg-navy px-6 py-3 font-bold text-white hover:bg-navy-light transition-colors shadow-lg shadow-navy/20"
               >
-                Get Alerts
+                Send Me New Listings
               </button>
             </form>
             <p className="text-xs text-gray-400 mt-4">No spam. Unsubscribe anytime.</p>
