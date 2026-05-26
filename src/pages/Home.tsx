@@ -3,14 +3,10 @@ import { useEffect } from 'react';
 import { mockListings } from '../data/mockListings';
 import { agent } from '../data/agent';
 import AgentCard from '../components/AgentCard';
+import ListingCard from '../components/ListingCard';
 import ParticleCanvas from '../components/ParticleCanvas';
-
-import InertiaGrid from '../components/InertiaGrid';
-import Testimonials from '../components/Testimonials';
 import SEO from '../components/SEO';
-import { FadeIn } from '../components/Motion';
-import { SparkleLink, SparkleAnchor } from '../components/SparkleButton';
-import { normalizePhone } from '../lib/utils';
+import { SparkleLink } from '../components/SparkleButton';
 
 function AnimatedCounter({ value, suffix = '' }: { value: number; suffix?: string }) {
   const count = useMotionValue(0);
@@ -53,10 +49,10 @@ export default function Home() {
               {agent.office} &bull; Free Consultation
             </p>
             <h1 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight mb-6">
-              Your Tulsa Home, <span className="gradient-gold">Without the Headaches</span>
+              Buy or Sell Your <span className="gradient-gold">Tulsa</span> Home
             </h1>
-            <p className="text-lg sm:text-xl text-gray-300 max-w-2xl mx-auto mb-10 leading-relaxed">
-              No pressure. No ghosting. Just honest guidance from a Tulsa native who answers her phone and treats every client like family.
+            <p className="text-lg sm:text-xl text-white/70 max-w-2xl mx-auto mb-10 leading-relaxed">
+              {agent.name} has earned {agent.reviewCount} five-star reviews by putting clients first. No pressure. No surprises. Just honest guidance and results.
             </p>
           </motion.div>
 
@@ -79,211 +75,182 @@ export default function Home() {
               Get a Free Consultation
             </SparkleLink>
           </motion.div>
-        </div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.6 }}
-          className="relative z-10 max-w-4xl mx-auto mt-16"
-        >
-          <div className="flex flex-wrap justify-center gap-4 sm:gap-6">
-            {[
-              {
-                icon: (
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                ),
-                value: <AnimatedCounter value={6} />,
-                label: 'Years Experience',
-              },
-              {
-                icon: (
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
-                  </svg>
-                ),
-                value: (
-                  <span>
-                    <AnimatedCounter value={4} />.<AnimatedCounter value={8} />
-                  </span>
-                ),
-                label: '/ 5 Rating',
-              },
-              {
-                icon: (
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                ),
-                value: <span>99%</span>,
-                label: 'Would Recommend',
-              },
-            ].map((stat, i) => (
-              <motion.div
-                key={stat.label}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.8 + i * 0.1 }}
-                whileHover={{ y: -4, transition: { type: 'spring', stiffness: 400, damping: 20 } }}
-                className="flex items-center gap-3 bg-white/95 backdrop-blur-sm rounded-full pl-2 pr-5 py-2 shadow-lg shadow-black/10 border border-white/20"
-              >
-                <span className="flex items-center justify-center w-9 h-9 rounded-full bg-gold text-navy shadow-sm">
-                  {stat.icon}
-                </span>
-                <div className="flex items-baseline gap-1.5">
-                  <span className="text-lg font-bold text-navy">{stat.value}</span>
-                  <span className="text-xs font-medium text-navy/70 uppercase tracking-wider">{stat.label}</span>
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.6 }}
+            className="relative z-10 max-w-4xl mx-auto mt-16"
+          >
+            <div className="glass rounded-2xl px-8 py-6 flex flex-wrap justify-center gap-8 sm:gap-16">
+              <div className="text-center">
+                <div className="text-3xl font-bold gradient-gold"><AnimatedCounter value={agent.reviewCount} /></div>
+                <div className="text-xs text-white/50 uppercase tracking-wider mt-1">5-Star Reviews</div>
+              </div>
+              <div className="text-center">
+                <div className="text-3xl font-bold gradient-gold">
+                  <AnimatedCounter value={4} />.<AnimatedCounter value={8} />/5
                 </div>
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
+                <div className="text-xs text-white/50 uppercase tracking-wider mt-1">Average Rating</div>
+              </div>
+              <div className="text-center">
+                <div className="text-3xl font-bold gradient-gold"><AnimatedCounter value={6} /></div>
+                <div className="text-xs text-white/50 uppercase tracking-wider mt-1">Years Experience</div>
+              </div>
+              <div className="text-center">
+                <div className="text-3xl font-bold gradient-gold"><AnimatedCounter value={99} suffix="%" /></div>
+                <div className="text-xs text-white/50 uppercase tracking-wider mt-1">Would Recommend</div>
+              </div>
+            </div>
+          </motion.div>
+        </div>
       </section>
 
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      {/* Agent */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
         <AgentCard />
       </section>
 
-      <InertiaGrid listings={featured} title="Featured Listings" subtitle="Properties" />
+      {/* Featured Listings */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-24">
+        <div className="mb-12">
+          <h2 className="text-3xl sm:text-4xl font-semibold text-ink tracking-[-0.02em] mb-3">Featured Listings</h2>
+          <p className="text-ink-2 max-w-xl">Hand-picked properties in the Tulsa metro area.</p>
+        </div>
+        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+          {featured.map((listing) => (
+            <ListingCard key={listing.id} listing={listing} />
+          ))}
+        </div>
+        <div className="mt-10 text-center">
+          <SparkleLink
+            to="/listings"
+            className="inline-flex items-center gap-2 text-ink font-medium hover:text-accent transition-colors"
+          >
+            View all listings
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            </svg>
+          </SparkleLink>
+        </div>
+      </section>
 
-      <Testimonials />
-
-      {/* Why Kandice */}
-      <section className="bg-cream py-24 px-4">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <FadeIn>
-            <div className="text-center mb-16">
-              <p className="text-gold text-sm font-semibold uppercase tracking-[0.2em] mb-4">Why Work With Kandice</p>
-              <h2 className="text-3xl sm:text-4xl font-bold text-navy mb-4">Real Estate That Puts You First</h2>
-              <p className="text-gray-600 max-w-2xl mx-auto leading-relaxed">
-                Buying or selling a home is one of the biggest decisions you will make. Kandice makes sure you never feel alone in it.
-              </p>
+      {/* Testimonials */}
+      <section className="border-t border-rule">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
+          <div className="max-w-3xl mx-auto text-center">
+            <blockquote className="text-2xl sm:text-3xl font-medium text-ink tracking-[-0.02em] leading-snug mb-8">
+              &ldquo;Kandice made the entire process feel effortless. She was always available, never pushy, and got us $15K above asking.&rdquo;
+            </blockquote>
+            <div className="text-ink-2 text-sm">
+              <span className="font-medium text-ink">The Henderson Family</span> &middot; Tulsa, OK
             </div>
-          </FadeIn>
-          <div className="grid md:grid-cols-3 gap-8">
-            {[
-              {
-                title: 'Local Expertise',
-                desc: 'Born and raised in Tulsa. Kandice knows which neighborhoods are up-and-coming, which school districts rank highest, and where to find the hidden gems.',
-                icon: 'M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z M15 11a3 3 0 11-6 0 3 3 0 016 0z',
-              },
-              {
-                title: 'Proven Results',
-                desc: 'Clients praise Kandice for her responsiveness, strong negotiation skills, and ability to close deals smoothly. She treats every transaction like it is her own.',
-                icon: 'M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z',
-              },
-              {
-                title: 'No Pressure, Ever',
-                desc: 'Kandice offers free consultations with zero obligation. She never rushes you into a decision, but she also never lets an opportunity slip away. Your timeline is her timeline.',
-                icon: 'M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z',
-              },
-            ].map((card, i) => (
-              <FadeIn key={card.title} delay={i * 0.15}>
-                <div className="bg-white rounded-2xl border border-gray-100 p-8 shadow-sm hover:shadow-lg transition-shadow h-full">
-                  <div className="w-12 h-12 rounded-xl bg-gold/10 flex items-center justify-center text-gold mb-6">
-                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d={card.icon} />
-                    </svg>
-                  </div>
-                  <h3 className="text-xl font-bold text-navy mb-3">{card.title}</h3>
-                  <p className="text-gray-600 leading-relaxed">{card.desc}</p>
-                </div>
-              </FadeIn>
-            ))}
           </div>
         </div>
       </section>
 
-      {/* What to Expect */}
-      <section className="bg-navy text-white py-24 px-4">
-        <div className="max-w-4xl mx-auto text-center">
-          <FadeIn>
-            <p className="text-gold text-sm font-semibold uppercase tracking-[0.2em] mb-4">The Kandice Experience</p>
-            <h2 className="text-3xl sm:text-4xl font-bold mb-4">What Working With Kandice Looks Like</h2>
-            <p className="text-gray-300 max-w-xl mx-auto mb-12 leading-relaxed">
-              Every client gets the same energy, expertise, and dedication — whether you are buying your first home or selling your fifth.
-            </p>
-            <div className="grid sm:grid-cols-3 gap-8 text-left">
-              {[
-                { step: '01', title: 'Initial Consultation', desc: 'Free, no-obligation meeting to discuss your goals, timeline, and budget. Kandice listens first, then builds a plan.' },
-                { step: '02', title: 'Strategy & Search', desc: 'For buyers: curated listings that match your criteria. For sellers: a pricing and marketing strategy designed to maximize value.' },
-                { step: '03', title: 'Close With Confidence', desc: 'Kandice handles the paperwork, negotiations, and unexpected hiccups so you can focus on your next chapter.' },
-              ].map((item, i) => (
-                <motion.div
-                  key={item.step}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.15, duration: 0.5 }}
-                  className="bg-white/5 backdrop-blur rounded-2xl p-6 border border-white/10"
-                >
-                  <div className="text-gold text-3xl font-bold mb-3">{item.step}</div>
-                  <h3 className="text-lg font-bold text-white mb-2">{item.title}</h3>
-                  <p className="text-gray-300 text-sm leading-relaxed">{item.desc}</p>
-                </motion.div>
-              ))}
+      {/* Why Work With Kandice */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
+        <div className="mb-12">
+          <h2 className="text-3xl sm:text-4xl font-semibold text-ink tracking-[-0.02em] mb-3">Why Work With Kandice</h2>
+          <p className="text-ink-2 max-w-xl">
+            Buying or selling a home is one of the biggest decisions you will make. Kandice makes sure you never feel alone in it.
+          </p>
+        </div>
+        <div className="grid md:grid-cols-3 gap-8">
+          {[
+            {
+              title: 'Local Expertise',
+              desc: 'Born and raised in Tulsa. Kandice knows which neighborhoods are up-and-coming, which school districts rank highest, and where to find the hidden gems.',
+            },
+            {
+              title: 'Proven Results',
+              desc: 'Clients praise Kandice for her responsiveness, strong negotiation skills, and ability to close deals smoothly. She treats every transaction like it is her own.',
+            },
+            {
+              title: 'No Pressure, Ever',
+              desc: 'Kandice offers free consultations with zero obligation. She never rushes you into a decision, but she also never lets an opportunity slip away.',
+            },
+          ].map((card) => (
+            <div
+              key={card.title}
+              className="rounded-[var(--radius-card)] border border-rule p-8 hover:border-ink/20 transition-colors"
+            >
+              <h3 className="text-lg font-semibold text-ink mb-3">{card.title}</h3>
+              <p className="text-ink-2 leading-relaxed text-sm">{card.desc}</p>
             </div>
-          </FadeIn>
+          ))}
+        </div>
+      </section>
+
+      {/* Process */}
+      <section className="border-t border-rule">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
+          <div className="mb-12">
+            <h2 className="text-3xl sm:text-4xl font-semibold text-ink tracking-[-0.02em] mb-3">The Kandice Experience</h2>
+            <p className="text-ink-2 max-w-xl">
+              Every client gets the same energy, expertise, and dedication.
+            </p>
+          </div>
+          <div className="grid sm:grid-cols-3 gap-8">
+            {[
+              { step: '01', title: 'Initial Consultation', desc: 'Free, no-obligation meeting to discuss your goals, timeline, and budget. Kandice listens first, then builds a plan.' },
+              { step: '02', title: 'Strategy & Search', desc: 'For buyers: curated listings that match your criteria. For sellers: a pricing and marketing strategy designed to maximize value.' },
+              { step: '03', title: 'Close With Confidence', desc: 'Kandice handles the paperwork, negotiations, and unexpected hiccups so you can focus on your next chapter.' },
+            ].map((item) => (
+              <div key={item.step} className="relative">
+                <div className="text-sm font-mono text-accent mb-3">{item.step}</div>
+                <h3 className="text-lg font-semibold text-ink mb-2">{item.title}</h3>
+                <p className="text-ink-2 text-sm leading-relaxed">{item.desc}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
       {/* Listing Alerts */}
-      <section className="bg-cream py-24 px-4">
-        <div className="max-w-3xl mx-auto text-center">
-          <FadeIn>
-            <p className="text-gold text-sm font-semibold uppercase tracking-[0.2em] mb-4">Stay Ahead of the Market</p>
-            <h2 className="text-3xl sm:text-4xl font-bold text-navy mb-4">See the Best Homes First</h2>
-            <p className="text-gray-600 mb-8 leading-relaxed">
-              The best Tulsa listings sell in days — sometimes hours. Get hand-picked properties sent straight to your inbox before they show up on Zillow or Redfin.
-            </p>
-            <form
-              className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto"
-              onSubmit={(e) => { e.preventDefault(); /* TODO: Wire to email service */ }}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
+        <div className="max-w-2xl mx-auto text-center">
+          <h2 className="text-3xl sm:text-4xl font-semibold text-ink tracking-[-0.02em] mb-3">See the Best Homes First</h2>
+          <p className="text-ink-2 mb-8 leading-relaxed">
+            The best Tulsa listings sell in days &mdash; sometimes hours. Get hand-picked properties sent straight to your inbox before they show up on Zillow or Redfin.
+          </p>
+          <form
+            className="grid grid-cols-1 sm:grid-cols-[1fr_auto] gap-3 w-full max-w-xl mx-auto"
+            onSubmit={(e) => { e.preventDefault(); /* TODO: Wire to email service */ }}
+          >
+            <input
+              type="email"
+              placeholder="your@email.com"
+              required
+              className="w-full rounded-full border border-ink/30 px-6 py-4 text-base text-ink font-medium focus:outline-none focus:border-ink transition-colors bg-white shadow-sm"
+            />
+            <button
+              type="submit"
+              className="w-full rounded-full border border-transparent bg-ink px-8 py-4 text-base font-semibold text-paper hover:bg-ink/90 transition-colors shadow-sm"
             >
-              <input
-                type="email"
-                placeholder="your@email.com"
-                required
-                className="flex-1 rounded-xl border-2 border-gray-200 px-4 py-3 text-base text-navy font-medium focus:outline-none focus:border-gold transition-colors"
-              />
-              <button
-                type="submit"
-                className="rounded-xl bg-navy px-6 py-3 font-bold text-white hover:bg-navy-light transition-colors shadow-lg shadow-navy/20"
-              >
-                Send Me New Listings
-              </button>
-            </form>
-            <p className="text-xs text-gray-400 mt-4">No spam. Unsubscribe anytime.</p>
-          </FadeIn>
+              Subscribe
+            </button>
+          </form>
+          <p className="text-xs text-ink-2 mt-4">No spam. Unsubscribe anytime.</p>
         </div>
       </section>
 
-      <section className="relative bg-navy text-white py-32 px-4 overflow-hidden">
-        <div className="relative z-10 max-w-4xl mx-auto text-center">
-          <FadeIn>
-            <h2 className="text-3xl sm:text-4xl font-bold mb-4 shadow-navy/20">
-              Ready to Make Your <span className="gradient-gold">Move</span>?
-            </h2>
-            <p className="text-gray-300 mb-8 max-w-xl mx-auto leading-relaxed">
-              Buying or selling in Tulsa does not have to be overwhelming. Get honest advice, a clear plan, and an agent who answers her phone.
-            </p>
-            <div className="flex justify-center gap-4 flex-wrap">
-              <SparkleLink
-                to="/contact"
-                className="inline-flex items-center rounded-xl bg-gold px-8 py-4 font-bold text-navy hover:bg-gold-hover transition-colors shadow-lg shadow-gold/20"
-              >
-                Schedule a Free Call
-              </SparkleLink>
-              <SparkleAnchor
-                href={`tel:${normalizePhone(agent.phone)}`}
-                className="inline-flex items-center rounded-xl bg-white/10 backdrop-blur-sm px-8 py-4 font-bold text-white hover:bg-white/20 transition-colors border border-white/10"
-              >
-                Call or Text {agent.phone}
-              </SparkleAnchor>
-            </div>
-          </FadeIn>
+      {/* Final CTA */}
+      <section className="border-t border-rule">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-24 text-center">
+          <h2 className="text-3xl sm:text-4xl font-semibold text-ink tracking-[-0.02em] mb-4">
+            Ready to Make Your Move?
+          </h2>
+          <p className="text-ink-2 mb-8 max-w-xl mx-auto leading-relaxed">
+            Buying or selling in Tulsa does not have to be overwhelming. Get honest advice, a clear plan, and an agent who answers her phone.
+          </p>
+          <SparkleLink
+            to="/contact"
+            className="inline-flex items-center rounded-full bg-ink px-8 py-4 font-semibold text-paper hover:bg-ink/90 transition-colors"
+          >
+            Schedule a Free Call
+          </SparkleLink>
         </div>
       </section>
     </div>

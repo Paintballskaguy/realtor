@@ -1,28 +1,61 @@
 @import "tailwindcss";
+@import "../tokens.css";
 
 @theme {
-  --color-navy: #0f172a;
+  --color-paper:      oklch(98% 0.005 80);
+  --color-paper-2:    oklch(96% 0.01 80);
+  --color-ink:        oklch(18% 0.01 260);
+  --color-ink-2:      oklch(45% 0.02 260);
+  --color-rule:       oklch(88% 0.01 80);
+  --color-accent:     oklch(72% 0.14 75);
+  --color-accent-ink: oklch(18% 0.01 260);
+  --color-focus:      oklch(72% 0.14 75);
+
+  --color-navy:       #0f172a;
   --color-navy-light: #1e293b;
-  --color-gold: #F2A900;
+  --color-gold:       #F2A900;
   --color-gold-hover: #D69400;
-  --color-cream: #fafaf9;
-  --color-surface: #ffffff;
-  --color-muted: #64748b;
+  --color-cream:      #fafaf9;
+
+  --font-display: "Geist Sans", system-ui, sans-serif;
+  --font-body:    "Geist Sans", system-ui, sans-serif;
+  --font-mono:    "Geist Mono", ui-monospace, monospace;
+
+  --spacing-md: 1.5rem;
+  --text-md: 1.125rem;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 html {
   scroll-behavior: smooth;
+  overflow-x: clip;
 }
 
 body {
-  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: var(--color-cream);
-  color: var(--color-navy);
+  background-color: var(--color-paper);
+  color: var(--color-ink);
+  overflow-x: clip;
 }
 
-/* Animated gradient background for hero */
+/* Focus-visible ring — instant, no animation */
+:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Hero animated gradient */
 @keyframes gradient-shift {
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
@@ -35,7 +68,7 @@ body {
   animation: gradient-shift 15s ease infinite;
 }
 
-/* Subtle noise texture overlay */
+/* Noise overlay */
 .noise-overlay::before {
   content: "";
   position: absolute;
@@ -60,11 +93,4 @@ body {
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.glass-light {
-  background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.5);
 }
