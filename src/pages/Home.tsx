@@ -37,7 +37,7 @@ export default function Home() {
       />
 
       {/* Hero */}
-      <section className="relative animated-gradient text-white py-24 px-4 overflow-hidden noise-overlay">
+      <section className="relative animated-gradient text-white pt-32 pb-24 px-4 overflow-hidden noise-overlay">
         <ParticleCanvas mode="hero" />
         <div className="relative z-10 max-w-7xl mx-auto text-center">
           <motion.div

@@ -150,7 +150,7 @@ export default function Layout() {
       </header>
 
       {/* Spacer for fixed nav */}
-      <div className="h-20" />
+      <div className="h-28" />
 
       <main id="main-content" className="flex-1">
         <Outlet />

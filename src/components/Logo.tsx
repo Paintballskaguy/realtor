@@ -5,7 +5,7 @@ interface LogoProps {
 }
 
 export default function Logo({ className = '', variant = 'dark', height = 40 }: LogoProps) {
-  const src = variant === 'dark' ? '/logo2.jpg' : '/logo1.jpg';
+  const src = variant === 'dark' ? '/logo2.png' : '/logo1.png';
 
   return (
     <img
