@@ -36,19 +36,19 @@ export default function ListingCard({ listing }: Props) {
         <div className="flex items-center gap-4 text-sm text-ink border-t border-rule pt-4">
           <span className="flex items-center gap-1.5">
             <svg aria-hidden="true" className="w-4 h-4 text-ink-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 12h14M12 5l7 7-7 7" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15h14M5 15v-3a2 2 0 012-2h10a2 2 0 012 2v3M5 15v2a2 2 0 002 2h10a2 2 0 002-2v-2M3 21h18" />
             </svg>
             {listing.beds} beds
           </span>
           <span className="flex items-center gap-1.5">
             <svg aria-hidden="true" className="w-4 h-4 text-ink-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 2a2 2 0 012 2v2h-4V4a2 2 0 012-2zM7 8h10v2a5 5 0 01-10 0V8zM5 20h14v2H5v-2z" />
             </svg>
             {listing.baths} baths
           </span>
           <span className="flex items-center gap-1.5">
             <svg aria-hidden="true" className="w-4 h-4 text-ink-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 10h16M4 14h16M4 18h16" />
             </svg>
             {listing.sqft.toLocaleString()} sqft
           </span>

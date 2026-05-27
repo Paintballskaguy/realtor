@@ -4,13 +4,20 @@ import { mockListings } from '../data/mockListings';
 import { agent } from '../data/agent';
 import AgentCard from '../components/AgentCard';
 import ListingCard from '../components/ListingCard';
-import ParticleCanvas from '../components/ParticleCanvas';
+
 import SEO from '../components/SEO';
 import { SparkleLink } from '../components/SparkleButton';
+import ListingAlertForm from '../components/ListingAlertForm';
+import Testimonials from '../components/Testimonials';
+import TrustBar from '../components/TrustBar';
+import VirtualTourSection from '../components/VirtualTourSection';
 
-function AnimatedCounter({ value, suffix = '' }: { value: number; suffix?: string }) {
+
+function AnimatedCounter({ value, suffix = '', decimals = 0 }: { value: number; suffix?: string; decimals?: number }) {
   const count = useMotionValue(0);
-  const rounded = useTransform(count, (latest) => Math.round(latest));
+  const formatted = useTransform(count, (latest) =>
+    decimals > 0 ? latest.toFixed(decimals) : Math.round(latest).toString()
+  );
 
   useEffect(() => {
     const controls = animate(count, value, { duration: 2, ease: 'easeOut' });
@@ -19,7 +26,7 @@ function AnimatedCounter({ value, suffix = '' }: { value: number; suffix?: strin
 
   return (
     <span>
-      <motion.span>{rounded}</motion.span>
+      <motion.span>{formatted}</motion.span>
       {suffix}
     </span>
   );
@@ -36,75 +43,128 @@ export default function Home() {
         pathname="/"
       />
 
-      {/* Hero */}
-      <section className="relative animated-gradient text-white pt-32 pb-24 px-4 overflow-hidden noise-overlay">
-        <ParticleCanvas mode="hero" />
-        <div className="relative z-10 max-w-7xl mx-auto text-center">
+      {/* Hero — Light Trust-Focused */}
+      <section className="relative bg-paper pt-28 pb-16 px-4 overflow-hidden">
+        {/* Subtle background texture */}
+        <div className="absolute inset-0 opacity-[0.03] pointer-events-none">
+          <svg width="100%" height="100%">
+            <filter id="noise-hero">
+              <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="4" stitchTiles="stitch" />
+            </filter>
+            <rect width="100%" height="100%" filter="url(#noise-hero)" />
+          </svg>
+        </div>
+
+        <div className="relative z-10 max-w-7xl mx-auto">
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+            {/* Left — copy */}
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.7, ease: [0.4, 0, 0.2, 1] }}
+            >
+              <div className="inline-flex items-center gap-2 bg-paper-2 border border-rule rounded-full px-4 py-1.5 text-sm font-medium text-ink-2 mb-6">
+                <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+                Accepting New Clients in Tulsa
+              </div>
+
+              <h1 className="text-4xl sm:text-5xl lg:text-[3.5rem] font-semibold text-ink tracking-[-0.03em] leading-[1.1] mb-6">
+                Buy or Sell Your{' '}
+                <span className="text-accent">Tulsa</span> Home With Confidence
+              </h1>
+
+              <p className="text-lg text-ink-2 max-w-lg mb-8 leading-relaxed">
+                {agent.name} has earned {agent.reviewCount} five-star reviews by putting
+                clients first. No pressure. No surprises. Just honest guidance and results.
+              </p>
+
+              <div className="flex flex-wrap gap-3 mb-10">
+                <SparkleLink
+                  to="/listings"
+                  className="inline-flex items-center rounded-full bg-ink px-7 py-3.5 font-semibold text-paper hover:bg-ink/90 transition-colors shadow-sm"
+                >
+                  See Homes for Sale
+                </SparkleLink>
+                <SparkleLink
+                  to="/contact"
+                  className="inline-flex items-center rounded-full border border-ink/30 px-7 py-3.5 font-semibold text-ink hover:border-ink hover:bg-paper-2 transition-colors"
+                >
+                  Free Consultation
+                </SparkleLink>
+              </div>
+
+              {/* Mini social proof */}
+              <div className="flex items-center gap-4 text-sm text-ink-2">
+                <div className="flex -space-x-2">
+                  <img src={agent.photo} alt="" className="w-8 h-8 rounded-full border-2 border-paper object-cover" />
+                  <div className="w-8 h-8 rounded-full border-2 border-paper bg-paper-2 flex items-center justify-center text-xs font-bold text-ink">
+                    +{agent.reviewCount}
+                  </div>
+                </div>
+                <span>
+                  <span className="font-semibold text-ink">{agent.reviewCount} happy clients</span> in Tulsa
+                </span>
+              </div>
+            </motion.div>
+
+            {/* Right — hero image + floating stats */}
+            <motion.div
+              initial={{ opacity: 0, x: 30 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.7, delay: 0.15, ease: [0.4, 0, 0.2, 1] }}
+              className="relative"
+            >
+              <div className="aspect-[4/3] rounded-[var(--radius-card)] overflow-hidden border border-rule shadow-lg">
+                <img
+                  src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=900&auto=format&fit=crop"
+                  alt="Beautiful Tulsa home exterior"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+
+              {/* Floating stat card — top right */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.6, duration: 0.5 }}
+                className="absolute -top-4 -right-4 bg-paper border border-rule rounded-[var(--radius-card)] shadow-lg p-4 hidden lg:block"
+              >
+                <div className="text-2xl font-bold text-ink">
+                  <AnimatedCounter value={4.8} suffix="/5" decimals={1} />
+                </div>
+                <div className="text-xs text-ink-2">Average Rating</div>
+              </motion.div>
+            </motion.div>
+          </div>
+
+          {/* Stats row */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, ease: [0.4, 0, 0.2, 1] }}
+            transition={{ duration: 0.6, delay: 0.5 }}
+            className="mt-20 grid grid-cols-2 sm:grid-cols-3 gap-6 max-w-3xl mx-auto"
           >
-            <p className="text-gold text-sm font-semibold uppercase tracking-[0.2em] mb-4">
-              {agent.office} &bull; Free Consultation
-            </p>
-            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight mb-6">
-              Buy or Sell Your <span className="gradient-gold">Tulsa</span> Home
-            </h1>
-            <p className="text-lg sm:text-xl text-white/70 max-w-2xl mx-auto mb-10 leading-relaxed">
-              {agent.name} has earned {agent.reviewCount} five-star reviews by putting clients first. No pressure. No surprises. Just honest guidance and results.
-            </p>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.3, ease: [0.4, 0, 0.2, 1] }}
-            className="flex justify-center gap-4 flex-wrap"
-          >
-            <SparkleLink
-              to="/listings"
-              className="inline-flex items-center rounded-xl bg-gold px-8 py-4 font-bold text-navy hover:bg-gold-hover transition-colors shadow-lg shadow-gold/20"
-            >
-              See Homes for Sale
-            </SparkleLink>
-            <SparkleLink
-              to="/contact"
-              className="inline-flex items-center rounded-xl bg-white/10 backdrop-blur px-8 py-4 font-bold text-white hover:bg-white/20 transition-colors border border-white/10"
-            >
-              Get a Free Consultation
-            </SparkleLink>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.6 }}
-            className="relative z-10 max-w-4xl mx-auto mt-16"
-          >
-            <div className="glass rounded-2xl px-8 py-6 flex flex-wrap justify-center gap-8 sm:gap-16">
-              <div className="text-center">
-                <div className="text-3xl font-bold gradient-gold"><AnimatedCounter value={agent.reviewCount} /></div>
-                <div className="text-xs text-white/50 uppercase tracking-wider mt-1">5-Star Reviews</div>
-              </div>
-              <div className="text-center">
-                <div className="text-3xl font-bold gradient-gold">
-                  <AnimatedCounter value={4} />.<AnimatedCounter value={8} />/5
+            {[
+              { value: agent.reviewCount, label: '5-Star Reviews', suffix: '' },
+              { value: 4.8, label: 'Average Rating', suffix: '/5', decimals: 1 },
+            ].map((stat) => (
+              <div key={stat.label} className="text-center">
+                <div className="text-2xl sm:text-3xl font-semibold text-ink tracking-tight">
+                  <AnimatedCounter value={stat.value} suffix={stat.suffix} decimals={stat.decimals} />
                 </div>
-                <div className="text-xs text-white/50 uppercase tracking-wider mt-1">Average Rating</div>
+                <div className="text-xs text-ink-2 uppercase tracking-wider mt-1">{stat.label}</div>
               </div>
-              <div className="text-center">
-                <div className="text-3xl font-bold gradient-gold"><AnimatedCounter value={6} /></div>
-                <div className="text-xs text-white/50 uppercase tracking-wider mt-1">Years Experience</div>
-              </div>
-              <div className="text-center">
-                <div className="text-3xl font-bold gradient-gold"><AnimatedCounter value={99} suffix="%" /></div>
-                <div className="text-xs text-white/50 uppercase tracking-wider mt-1">Would Recommend</div>
-              </div>
+            ))}
+            <div className="text-center">
+              <div className="text-2xl sm:text-3xl font-semibold text-ink tracking-tight">Tulsa Native</div>
+              <div className="text-xs text-ink-2 uppercase tracking-wider mt-1">Local Expertise</div>
             </div>
           </motion.div>
         </div>
       </section>
+
+      {/* Trust Bar */}
+      <TrustBar />
 
       {/* Agent */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
@@ -135,19 +195,11 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Virtual Tours */}
+      <VirtualTourSection />
+
       {/* Testimonials */}
-      <section className="border-t border-rule">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
-          <div className="max-w-3xl mx-auto text-center">
-            <blockquote className="text-2xl sm:text-3xl font-medium text-ink tracking-[-0.02em] leading-snug mb-8">
-              &ldquo;Kandice made the entire process feel effortless. She was always available, never pushy, and got us $15K above asking.&rdquo;
-            </blockquote>
-            <div className="text-ink-2 text-sm">
-              <span className="font-medium text-ink">The Henderson Family</span> &middot; Tulsa, OK
-            </div>
-          </div>
-        </div>
-      </section>
+      <Testimonials />
 
       {/* Why Work With Kandice */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
@@ -215,23 +267,7 @@ export default function Home() {
           <p className="text-ink-2 mb-8 leading-relaxed">
             The best Tulsa listings sell in days &mdash; sometimes hours. Get hand-picked properties sent straight to your inbox before they show up on Zillow or Redfin.
           </p>
-          <form
-            className="grid grid-cols-1 sm:grid-cols-[1fr_auto] gap-3 w-full max-w-xl mx-auto"
-            onSubmit={(e) => { e.preventDefault(); /* TODO: Wire to email service */ }}
-          >
-            <input
-              type="email"
-              placeholder="your@email.com"
-              required
-              className="w-full rounded-full border border-ink/30 px-6 py-4 text-base text-ink font-medium focus:outline-none focus:border-ink transition-colors bg-white shadow-sm"
-            />
-            <button
-              type="submit"
-              className="w-full rounded-full border border-transparent bg-ink px-8 py-4 text-base font-semibold text-paper hover:bg-ink/90 transition-colors shadow-sm"
-            >
-              Subscribe
-            </button>
-          </form>
+          <ListingAlertForm />
           <p className="text-xs text-ink-2 mt-4">No spam. Unsubscribe anytime.</p>
         </div>
       </section>

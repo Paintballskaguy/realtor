@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import reviewsData from '../data/reviews.json';
+import { agent } from '../data/agent';
 import { FadeIn } from './Motion';
 
 interface Review {
@@ -123,9 +124,19 @@ export default function Testimonials() {
       <div className="max-w-3xl mx-auto">
         <FadeIn>
           <div className="text-center mb-16">
-            <p className="text-gold text-sm font-semibold uppercase tracking-[0.2em] mb-4">
-              Client Reviews
-            </p>
+            <div className="flex items-center justify-center gap-3 mb-4">
+              <img
+                src={agent.photo}
+                alt={agent.name}
+                className="w-14 h-14 rounded-full object-cover border-2 border-gold/30"
+              />
+              <div className="text-left">
+                <p className="text-gold text-sm font-semibold uppercase tracking-[0.2em]">
+                  Client Reviews
+                </p>
+                <p className="text-xs text-muted">Verified by RealSatisfied</p>
+              </div>
+            </div>
             <h2 className="text-3xl sm:text-4xl font-bold text-navy mb-4">
               What Clients Are Saying
             </h2>
@@ -265,7 +276,10 @@ export default function Testimonials() {
                 </StaggerItem>
 
                 <StaggerItem delay={0.28}>
-                  <div className="flex flex-col items-center gap-1">
+                  <div className="flex flex-col items-center gap-2">
+                    <div className="w-10 h-10 rounded-full bg-gold/10 text-gold flex items-center justify-center text-sm font-bold border border-gold/20">
+                      {activeReview.client.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase()}
+                    </div>
                     <p className="font-bold text-navy">{activeReview.client}</p>
                     <div className="flex items-center gap-2 text-sm text-muted">
                       <span className="bg-gold/10 text-gold text-xs font-bold px-2.5 py-0.5 rounded-full">

@@ -64,7 +64,7 @@ export default function Layout() {
           className="flex items-center justify-between gap-4 px-5 py-3 rounded-full bg-paper/80 backdrop-blur-md border border-rule shadow-sm"
           aria-label="Primary"
         >
-          <Link to="/" className="shrink-0 hover:opacity-80 transition-opacity">
+          <Link to="/" className="shrink-0 hover:opacity-80 transition-opacity flex items-center">
             <Logo variant="dark" height={32} />
           </Link>
 
